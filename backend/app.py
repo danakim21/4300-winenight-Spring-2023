@@ -12,9 +12,9 @@ os.environ['ROOT_PATH'] = os.path.abspath(os.path.join("..",os.curdir))
 # Don't worry about the deployment credentials, those are fixed
 # You can use a different DB name if you want to
 MYSQL_USER = "root"
-MYSQL_USER_PASSWORD = "admin"
+MYSQL_USER_PASSWORD = "mysqlroot"
 MYSQL_PORT = 3306
-MYSQL_DATABASE = "kardashiandb"
+MYSQL_DATABASE = "wine_dataset"
 
 mysql_engine = MySQLDatabaseHandler(MYSQL_USER,MYSQL_USER_PASSWORD,MYSQL_PORT,MYSQL_DATABASE)
 
@@ -24,23 +24,37 @@ mysql_engine.load_file_into_db()
 app = Flask(__name__)
 CORS(app)
 
-# Sample search, the LIKE operator in this case is hard-coded, 
-# but if you decide to use SQLAlchemy ORM framework, 
-# there's a much better and cleaner way to do this
-def sql_search(episode):
-    query_sql = f"""SELECT * FROM episodes WHERE LOWER( title ) LIKE '%%{episode.lower()}%%' limit 10"""
-    keys = ["id","title","descr"]
+# # Sample search, the LIKE operator in this case is hard-coded, 
+# # but if you decide to use SQLAlchemy ORM framework, 
+# # there's a much better and cleaner way to do this
+# def sql_search(episode):
+#     query_sql = f"""SELECT * FROM episodes WHERE LOWER( title ) LIKE '%%{episode.lower()}%%' limit 10"""
+#     keys = ["id","title","descr"]
+#     data = mysql_engine.query_selector(query_sql)
+#     return json.dumps([dict(zip(keys,i)) for i in data])
+
+# @app.route("/")
+# def home():
+#     return render_template('base.html',title="sample html")
+
+# @app.route("/episodes")
+# def episodes_search():
+#     text = request.args.get("title")
+#     return sql_search(text)
+
+def sql_search(wine_name):
+    query_sql = f"""SELECT * FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(wine) LIKE '%%{wine_name}%%' LIMIT 10"""
+    keys = ["wine", "country", "winery", "category", "designation", "varietal", "appellation", "alcohol", "price", "rating", "reviewer", "review", "price_numeric", "price_range", "alcohol_numeric"]
     data = mysql_engine.query_selector(query_sql)
-    return json.dumps([dict(zip(keys,i)) for i in data])
+    return json.dumps([dict(zip(keys, i)) for i in data])
 
 @app.route("/")
 def home():
-    return render_template('base.html',title="sample html")
+    return render_template('base.html', title="sample html")
 
-@app.route("/episodes")
-def episodes_search():
-    text = request.args.get("title")
-    return sql_search(text)
+@app.route("/wine_data")
+def wine_search():
+    wine_name = request.args.get("wine")
+    return sql_search(wine_name)
 
-
-# app.run(debug=True)
+app.run(debug=True)
