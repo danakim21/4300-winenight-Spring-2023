@@ -1,75 +1,90 @@
-.full-body-container{
+.full-body-container {
     position: absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    width:100%;
-    height:100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: start;
     align-items: center;
     flex-direction: column;
 }
 
-#google-c{
-    color:#4285F4;
+#google-c {
+    color: #4285F4;
 }
 
-#google-s{
-    color:#DB4437;
+#google-s {
+    color: #DB4437;
 }
 
-#google-4{
-    color:	#F4B400;
+#google-4 {
+    color: #F4B400;
 }
 
-#google-3{
-    color:	#4285F4;
+#google-3 {
+    color: #4285F4;
 }
 
-#google-0-1{
-    color:	#0F9D58;
+#google-0-1 {
+    color: #0F9D58;
 }
 
-#google-0-2{
-    color:#DB4437;
+#google-0-2 {
+    color: #DB4437;
 }
 
-.google-colors{
+.google-colors {
     display: flex;
     align-items: center;
     font-size: 48px;
     font-family: 'Open Sans', sans-serif;
 }
 
-.google-colors h1{
+.google-colors h1 {
     margin-bottom: 0;
     margin-right: 3px;
 }
 
-.input-box{
-    border-radius: 50px;
-    border:1px solid black;
+.search-box {
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 32px 20px;
+    width: 994px;
+    height: 360px;
+    box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.1), 0px 0px 4px -1px rgba(0, 0, 0, 0.06);
+    flex-direction: column;
+    margin-bottom: 29px;
+}
+
+.input-box {
+    border-radius: 6px;
+    border: 1px solid #E2E8F0;
     display: flex;
     align-items: center;
     margin-top: 10px;
-    padding:12px;
-    width: 600px;
+    padding: 12px;
+    width: 954px;
+    height: 52px;
 }
 
-.input-box img{
+.input-box img {
     height: 20px;
-    width:20px;
+    width: 20px;
 }
 
-.top-text{
+
+/*
+.top-text {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
+} */
 
-.input-box input{
+.input-box input {
     width: 100%;
     margin-left: 10px;
     font-size: 16px;
@@ -77,15 +92,34 @@
     outline: 0;
 }
 
-#answer-box{
-    width: 700px;
-    margin-top:50px; 
+.recommend-button {
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding: 10px 24px;
+    width: 157px;
+    height: 48px;
+    background: #C53030;
+    box-shadow: none;
+    margin-top: 29px;
+    color: #FFFFFF;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
 }
 
-.episode-title{
+#answer-box {
+    width: 700px;
+    margin-top: 50px;
+}
+
+.episode-title {
     font-family: 'Kanit', sans-serif;
 }
 
-.episode-desc{
+.episode-desc {
     font-family: 'Montserrat', sans-serif;
 }
