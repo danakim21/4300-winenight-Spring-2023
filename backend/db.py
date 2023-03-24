@@ -7,7 +7,7 @@ os.environ['ROOT_PATH'] = os.path.abspath(os.path.join("..",os.curdir))
 
 # These are the DB credentials for your OWN MySQL
 # Don't worry about the deployment credentials, those are fixed
-# You can use a different DB name if you want to
+# You can use a different DB name if you want to# You can use a different DB name if you want to
 MYSQL_USER = "root"
 MYSQL_USER_PASSWORD = "mysqlroot"
 MYSQL_PORT = 3306
