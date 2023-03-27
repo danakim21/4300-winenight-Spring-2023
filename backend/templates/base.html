@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
   rel="stylesheet">
 
@@ -13,7 +14,7 @@
     </div>
     <div class="search-box">
       <div class="similar-wines box">
-        <div>
+        <div class="similar-wines-title">
           <p class="similar-wines">Similar Wines</p>
         </div>
         <div class="similar-input-box" onclick="sendFocus()">
@@ -21,7 +22,7 @@
             id="filter-text-val" onkeyup="filterText()">
         </div>
         <div>
-          <p class="similar-wines-inst">Use comma to seperate multiple wines</p>
+          <p class="inst">Use comma to seperate multiple wines</p>
         </div>
       </div>
       <div class="preferred-flavor box">
@@ -34,12 +35,15 @@
             id="filter-text-val-preferred" onkeyup="filterText()">
         </div>
         <div>
-          <p class="preferred-flavor-inst">Use comma to seperate multiple wines</p>
+          <p class="inst">Use comma to seperate multiple wines</p>
         </div>
+      </div>
+      <div>
+        Add Filter(s)
       </div>
 
     </div>
-    <button class="recommend-button" onclick="recommend()">recommend</button>
+    <button class="recommend-button" onclick="recommend()">Recommend</button>
 
 
     <p id="result-text"></p>

@@ -10,6 +10,7 @@
     justify-content: start;
     align-items: center;
     flex-direction: column;
+    font-family: 'Inter', sans-serif;
 }
 
 /*
@@ -68,6 +69,16 @@
     margin-bottom: 29px;
 }
 
+.similar-wines-title {
+    height: 24px;
+    width: 476px;
+    margin: 32px 498px 8px 0px;
+}
+
+.similar-wines {
+    font-size: 16px;
+}
+
 .similar-input-box {
     border-radius: 6px;
     border: 1px solid #E2E8F0;
@@ -77,6 +88,7 @@
     padding: 12px;
     width: 954px;
     height: 52px;
+    margin-bottom: 8px;
 }
 
 /*
@@ -101,6 +113,10 @@
     outline: 0;
 }
 
+.inst {
+    font-size: 14px;
+    color: #718096;
+}
 
 .preferred-input-box {
     border-radius: 6px;
@@ -121,6 +137,8 @@
     outline: 0;
 }
 
+
+
 /*
 .preferred-input-box img {
     height: 20px;
@@ -133,9 +151,6 @@
     flex-direction: column;
     align-items: center;
 }*/
-
-
-
 
 
 .recommend-button {
