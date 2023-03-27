@@ -1,82 +1,119 @@
-<!DOCTYPE html>
+<!doctype html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet"
-/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+  rel="stylesheet">
+
 <body>
   <div class="full-body-container">
-    <div class="top-text">
-      <div class="google-colors">
-        <h1 id="google-c">C</h1>
-        <h1 id="google-s">S</h1>
-        <h1 id="google-4">4</h1>
-        <h1 id="google-3">3</h1>
-        <h1 id="google-0-1">0</h1>
-        <h1 id="google-0-2">0</h1>
-      </div>
-      <div class="input-box" onclick="sendFocus()">
-        <img src="{{ url_for('static', filename='images/mag.png') }}" />
-        <input
-          placeholder="Search for a Keeping up with the Kardashians episodes"
-          id="filter-text-val"
-        />
-      </div>
+    <div class="logo">
+      <img src="/static/images/logo-2.png" alt="winenight">
     </div>
-    <button class="recommend-button" onclick="filterText()">recommend</button>
+    <div class="search-box">
+      <div class="similar-wines box">
+        <div class="similar-wines-title">
+          <p class="similar-wines">Similar Wines</p>
+        </div>
+        <div class="similar-input-box" onclick="sendFocus()">
+          <input placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio, Oak Grove 2012 Reserve Pinot Grigio"
+            id="filter-text-val" onkeyup="filterText()">
+        </div>
+        <div>
+          <p class="inst">Use comma to seperate multiple wines</p>
+        </div>
+      </div>
+      <div class="preferred-flavor box">
+        <div>
+          <p class="preferred-flavor">Preferred Flavor</p>
+        </div>
+        <div class="preferred-input-box" onclick="sendFocus()">
+          <input
+            placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
+            id="filter-text-val-preferred" onkeyup="filterText()">
+        </div>
+        <div>
+          <p class="inst">Use comma to seperate multiple wines</p>
+        </div>
+      </div>
+      <div>
+        Add Filter(s)
+      </div>
+
+    </div>
+    <button class="recommend-button" onclick="filterText()">Recommend</button>
+
+
+    <p id="result-text"></p>
+    <!-- <button id="sort-button" onclick="sortPrice(this)" data-sort="asc">Sort Price (Low to High)</button> -->
     <div id="answer-box"></div>
+
+  </div>
   </div>
 
   <script>
-    function answerBoxTemplate(title, titleDesc, keywords) {
-      for (const keyword of keywords) {
-        const regex = new RegExp(`\\b${keyword}\\b`, "gi");
-        titleDesc = titleDesc.replace(regex, `<strong>${keyword}</strong>`);
-      }
-      return `<div class=''>
-            <h3 class='episode-title'>${title}</h3>
-            <p class='episode-desc'>${titleDesc}</p>
-          </div>`;
+
+    let sortButton = document.getElementById("sort-button");
+    let sortDirection = "none";
+
+    function answerBoxTemplate(name, price, category, varietal, appellation, country) {
+      return `<div class='output-content-div'>
+                <p class='output-title'>${name}</p>
+                <p class='output-price'>${price}</p>
+                <div class="output-line"></div>
+                <div class="output-category-div">
+                  <p class='output-category'>🍷 ${category}</p>
+                  <div class='output-category-line'></div>
+                  <p class='output-varietal'>${varietal}</p>
+                </div>
+                <div class="output-region-div">
+                  <p class='output-appellation'>📍 ${appellation}, </p>
+                  <p class='output-country'> &nbsp;${country}</p>
+                <div>
+            </div>`;
+
     }
 
     function sendFocus() {
-      document.getElementById("filter-text-val").focus();
+      document.getElementById('filter-text-val-preferred').focus()
     }
 
     function filterText() {
-      document.getElementById("answer-box").innerHTML = "";
-      console.log(document.getElementById("filter-text-val").value);
-      const params = new URLSearchParams();
-      const keywords = document
-        .getElementById("filter-text-val")
-        .value.split(",");
-      keywords.forEach((keyword) => {
-        params.append("keywords", keyword);
-      });
-      fetch("/wine_reviews?" + params.toString())
-        .then((response) => response.json())
-        .then((data) => {
-          let rowsDisplayed = 0;
-          console.log(data);
-          data.forEach((row) => {
-            if (rowsDisplayed < 20) {
-              // Only display up to 20 rows
-              let tempDiv = document.createElement("div");
-              tempDiv.innerHTML = answerBoxTemplate(
-                row.wine,
-                row.review,
-                keywords
-              );
-              document.getElementById("answer-box").appendChild(tempDiv);
-              rowsDisplayed++;
-            } else {
-              return; // Break out of loop once 20 rows are displayed
+      let recommendButton = document.querySelector(".recommend-button");
+      recommendButton.addEventListener("click", () => {
+        document.getElementById("result-text").innerHTML = "Our 10 Recommendations for you!";
+        document.getElementById("answer-box").innerHTML = "";
+        console.log(document.getElementById("filter-text-val-preferred").value);
+        fetch(
+          "/wine_data?" +
+          new URLSearchParams({
+            wine: document.getElementById("filter-text-val-preferred").value,
+          }).toString()
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+
+            if (data.length === 0) {
+              document.getElementById("result-text").innerHTML = "No results found. Please try typing different preferred flavors.";
             }
+
+            data.forEach((row) => {
+              row.appellation = row.appellation.split(",")[0];
+              console.log(row.appellation);
+              let tempDiv = document.createElement("div");
+              tempDiv.classList.add("output-card");
+              tempDiv.innerHTML = answerBoxTemplate(row.wine, row.price, row.category, row.varietal, row.appellation, row.country);
+              document.getElementById("answer-box").appendChild(tempDiv);
+            });
+
           });
-        });
+      });
     }
+
+
+
   </script>
 </body>
