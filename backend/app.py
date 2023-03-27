@@ -29,6 +29,7 @@ def sql_search_reviews():
     user_input = flavor_typo_corrector.get_replaced_flavor_list(user_input)
 
     results = boolean_search(data, keys, user_input)
+    results = results[:10]
     return json.dumps(results)
 
 @app.route("/")

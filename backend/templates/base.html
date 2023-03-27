@@ -69,7 +69,7 @@
                   <p class='output-varietal'>${varietal}</p>
                 </div>
                 <div class="output-region-div">
-                  <p class='output-appellation'>📍 ${appellation}, </p>
+                  <p class='output-appellation'>📍 ${appellation ? appellation + ", " : ""}</p>
                   <p class='output-country'> &nbsp;${country}</p>
                 <div>
             </div>`;
@@ -99,6 +99,7 @@
           let rowsDisplayed = 0;
           console.log(data);
           data.forEach((row) => {
+            row.appellation = row.appellation.split(",")[0];
             if (rowsDisplayed < 20) {
               // Only display up to 20 rows
               let tempDiv = document.createElement("div");
