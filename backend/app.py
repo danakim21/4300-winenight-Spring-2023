@@ -25,12 +25,8 @@ def sql_search_reviews():
     keys = ["wine", "country", "winery", "category", "designation", "varietal", "appellation", "alcohol", "price", "rating", "reviewer", "review", "price_numeric", "price_range", "alcohol_numeric"]
     data = mysql_engine.query_selector(query_sql)
 
-    print(user_input)
-
     flavor_typo_corrector = FlavorTypoCorrector(3)
     user_input = flavor_typo_corrector.get_replaced_flavor_list(user_input)
-
-    print(user_input)
 
     results = boolean_search(data, keys, user_input)
     return json.dumps(results)
