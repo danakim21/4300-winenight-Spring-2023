@@ -20,11 +20,19 @@ def sql_search(wine_name):
     return json.dumps([dict(zip(keys, i)) for i in data])
 
 def sql_search_reviews():
-    keywords = request.args.getlist("keywords")
+    user_input = request.args.getlist("keywords")
     query_sql = f"""SELECT * FROM {MYSQL_DATABASE}.wine_data"""
     keys = ["wine", "country", "winery", "category", "designation", "varietal", "appellation", "alcohol", "price", "rating", "reviewer", "review", "price_numeric", "price_range", "alcohol_numeric"]
     data = mysql_engine.query_selector(query_sql)
-    results = boolean_search(data, keys, keywords)
+
+    print(user_input)
+
+    flavor_typo_corrector = FlavorTypoCorrector(3)
+    user_input = flavor_typo_corrector.get_replaced_flavor_list(user_input)
+
+    print(user_input)
+
+    results = boolean_search(data, keys, user_input)
     return json.dumps(results)
 
 @app.route("/")
@@ -39,15 +47,5 @@ def wine_search():
 @app.route("/wine_reviews")
 def wine_reviews_search():
     return sql_search_reviews()
-
-# keyword_extractor = FlavorKeywords()
-# words = keyword_extractor.flavor_words
-# print(words)
-
-# flavor_typo_corrector = FlavorTypoCorrector(3) 
-# original_list = ["friuty", "brightt", "good", "swet", "raspberry", "woodiy", "coke", "dri", "spice", "newflavor"]
-# new_list = flavor_typo_corrector.get_replaced_flavor_list(original_list)
-# print(original_list)
-# print(new_list)
 
 app.run(debug=True)
