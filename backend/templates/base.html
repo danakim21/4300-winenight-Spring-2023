@@ -43,7 +43,7 @@
       </div>
 
     </div>
-    <button class="recommend-button" onclick="recommend()">Recommend</button>
+    <button class="recommend-button" onclick="filterText()">Recommend</button>
 
 
     <p id="result-text"></p>
@@ -73,6 +73,7 @@
                   <p class='output-country'> &nbsp;${country}</p>
                 <div>
             </div>`;
+
     }
 
     function sendFocus() {
@@ -107,6 +108,7 @@
               tempDiv.innerHTML = answerBoxTemplate(row.wine, row.price, row.category, row.varietal, row.appellation, row.country);
               document.getElementById("answer-box").appendChild(tempDiv);
             });
+
           });
       });
     }
