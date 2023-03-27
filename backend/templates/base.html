@@ -19,7 +19,7 @@
         </div>
         <div class="similar-input-box" onclick="sendFocus()">
           <input placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio, Oak Grove 2012 Reserve Pinot Grigio"
-            id="filter-text-val" onkeyup="filterText()">
+            id="filter-text-val">
         </div>
         <div>
           <p class="inst">Use comma to separate multiple wines</p>
@@ -32,7 +32,7 @@
         <div class="preferred-input-box" onclick="sendFocus()">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
-            id="filter-text-val-preferred" onkeyup="filterText()">
+            id="filter-text-val-preferred">
         </div>
         <div>
           <p class="inst">Use comma to separate multiple keywords</p>
@@ -43,7 +43,7 @@
       </div>
 
     </div>
-    <button class="recommend-button" onclick="recommend()">Recommend</button>
+    <button class="recommend-button" onclick="filterText()">Recommend</button>
 
 
     <p id="result-text"></p>
@@ -58,7 +58,7 @@
     let sortButton = document.getElementById("sort-button");
     let sortDirection = "none";
 
-    function answerBoxTemplate(name, price, category, varietal, appellation, country) {
+    function answerBoxTemplate(name, price, category, varietal, appellation, country,review) {
       return `<div class='output-content-div'>
                 <p class='output-title'>${name}</p>
                 <p class='output-price'>${price}</p>
@@ -69,10 +69,11 @@
                   <p class='output-varietal'>${varietal}</p>
                 </div>
                 <div class="output-region-div">
-                  <p class='output-appellation'>📍 ${appellation}, </p>
+                  <p class='output-appellation'>📍 ${appellation ? appellation + ", " : ""}</p>
                   <p class='output-country'> &nbsp;${country}</p>
                 <div>
             </div>`;
+
     }
 
     function sendFocus() {
@@ -80,35 +81,46 @@
     }
 
     function filterText() {
+      document.getElementById("answer-box").innerHTML = "";
       let recommendButton = document.querySelector(".recommend-button");
-      recommendButton.addEventListener("click", () => {
-        document.getElementById("result-text").innerHTML = "Our 10 Recommendations for you!";
-        document.getElementById("answer-box").innerHTML = "";
-        console.log(document.getElementById("filter-text-val-preferred").value);
-        fetch(
-          "/wine_data?" +
-          new URLSearchParams({
-            wine: document.getElementById("filter-text-val-preferred").value,
-          }).toString()
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-
-            if (data.length === 0) {
+      document.getElementById("result-text").innerHTML = "Our 10 Recommendations for you!";
+      const params = new URLSearchParams();
+      const keywords = document
+        .getElementById("filter-text-val-preferred")
+        .value.split(",");
+      keywords.forEach((keyword) => {
+        params.append("keywords", keyword);
+      });
+      fetch("/wine_reviews?" + params.toString())
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.length === 0) {
               document.getElementById("result-text").innerHTML = "No results found. Please try typing different preferred flavors.";
-            }
-
-            data.forEach((row) => {
-              row.appellation = row.appellation.split(",")[0];
-              console.log(row.appellation);
+          }
+          let rowsDisplayed = 0;
+          console.log(data);
+          data.forEach((row) => {
+            row.appellation = row.appellation.split(",")[0];
+            if (rowsDisplayed < 20) {
+              // Only display up to 20 rows
               let tempDiv = document.createElement("div");
               tempDiv.classList.add("output-card");
-              tempDiv.innerHTML = answerBoxTemplate(row.wine, row.price, row.category, row.varietal, row.appellation, row.country);
+              tempDiv.innerHTML = answerBoxTemplate(
+                row.wine,
+                row.price,
+                row.category,
+                row.varietal,
+                row.appellation,
+                row.country,
+                row.review
+              );
               document.getElementById("answer-box").appendChild(tempDiv);
-            });
+              rowsDisplayed++;
+            } else {
+              return; // Break out of loop once 20 rows are displayed
+            }
           });
-      });
+        });
     }
 
 
