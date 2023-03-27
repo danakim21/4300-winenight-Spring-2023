@@ -23,19 +23,23 @@
         <input
           placeholder="Search for a Keeping up with the Kardashians episodes"
           id="filter-text-val"
-          onkeyup="filterText()"
         />
       </div>
     </div>
+    <button class="recommend-button" onclick="filterText()">recommend</button>
     <div id="answer-box"></div>
   </div>
 
   <script>
-    function answerBoxTemplate(title, titleDesc) {
+    function answerBoxTemplate(title, titleDesc, keywords) {
+      for (const keyword of keywords) {
+        const regex = new RegExp(`\\b${keyword}\\b`, "gi");
+        titleDesc = titleDesc.replace(regex, `<strong>${keyword}</strong>`);
+      }
       return `<div class=''>
-                <h3 class='episode-title'>${title}</h3>
-                <p class='episode-desc'>${titleDesc}</p>
-            </div>`;
+            <h3 class='episode-title'>${title}</h3>
+            <p class='episode-desc'>${titleDesc}</p>
+          </div>`;
     }
 
     function sendFocus() {
@@ -45,18 +49,32 @@
     function filterText() {
       document.getElementById("answer-box").innerHTML = "";
       console.log(document.getElementById("filter-text-val").value);
-      fetch(
-        "/wine_data?" +
-          new URLSearchParams({
-            wine: document.getElementById("filter-text-val").value,
-          }).toString()
-      )
+      const params = new URLSearchParams();
+      const keywords = document
+        .getElementById("filter-text-val")
+        .value.split(",");
+      keywords.forEach((keyword) => {
+        params.append("keywords", keyword);
+      });
+      fetch("/wine_reviews?" + params.toString())
         .then((response) => response.json())
         .then((data) => {
+          let rowsDisplayed = 0;
+          console.log(data);
           data.forEach((row) => {
-            let tempDiv = document.createElement("div");
-            tempDiv.innerHTML = answerBoxTemplate(row.wine, row.review);
-            document.getElementById("answer-box").appendChild(tempDiv);
+            if (rowsDisplayed < 20) {
+              // Only display up to 20 rows
+              let tempDiv = document.createElement("div");
+              tempDiv.innerHTML = answerBoxTemplate(
+                row.wine,
+                row.review,
+                keywords
+              );
+              document.getElementById("answer-box").appendChild(tempDiv);
+              rowsDisplayed++;
+            } else {
+              return; // Break out of loop once 20 rows are displayed
+            }
           });
         });
     }
