@@ -19,17 +19,15 @@
   margin: 68px 612px 51px 591px;
 }
 
+
 .search-box {
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  padding: 32px 20px;
-  width: 994px;
-  height: 360px;
-  box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.1),
-    0px 0px 4px -1px rgba(0, 0, 0, 0.06);
-  flex-direction: column;
-  margin-bottom: 29px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 32px 20px;
+    box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.1), 0px 0px 4px -1px rgba(0, 0, 0, 0.06);
+    flex-direction: column;
+    margin-bottom: 29px;
 }
 
 .similar-wines-title {
@@ -104,6 +102,11 @@
     flex-direction: column;
     align-items: center;
 }*/
+
+button{
+    border: none;
+
+}
 
 .recommend-button {
   border-radius: 6px;
@@ -314,7 +317,16 @@
 }
 
 .episode-desc {
-  font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.filter{
+    width: 100%;
+    color: #C53030;
+}
+
+.filter-label {
+    align-items: left;
 }
 
 strong {
