@@ -45,4 +45,4 @@ def wine_search():
 def wine_reviews_search():
     return sql_search_reviews()
 
-app.run(debug=True)
+# app.run(debug=True)
