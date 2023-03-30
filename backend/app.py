@@ -20,15 +20,24 @@ def sql_search(wine_name):
     return json.dumps([dict(zip(keys, i)) for i in data])
 
 def sql_search_reviews():
-    user_input = request.args.getlist("keywords")
-    query_sql = f"""SELECT * FROM {MYSQL_DATABASE}.wine_data"""
+    # Get user input 
+    flavors = request.args.getlist("flavors")
+    min_price = request.args.get("minPrice")
+    max_price = request.args.get("maxPrice")
+    category = request.args.get("category")
+
+    # Query 
+    query_sql = f"""SELECT * FROM {MYSQL_DATABASE}.wine_data WHERE price_numeric BETWEEN {min_price} AND {max_price} AND LOWER(category) = LOWER("{category}")"""
     keys = ["wine", "country", "winery", "category", "designation", "varietal", "appellation", "alcohol", "price", "rating", "reviewer", "review", "price_numeric", "price_range", "alcohol_numeric"]
     data = mysql_engine.query_selector(query_sql)
 
+    # Correct typos using minimum edit distance 
     flavor_typo_corrector = FlavorTypoCorrector(3)
-    user_input = flavor_typo_corrector.get_replaced_flavor_list(user_input)
+    flavors = flavor_typo_corrector.get_replaced_flavor_list(flavors)
 
-    results = boolean_search(data, keys, user_input)
+    # Get results using boolean search 
+    results = boolean_search(data, keys, flavors)
+    
     results = results[:10]
     return json.dumps(results)
 
@@ -45,4 +54,4 @@ def wine_search():
 def wine_reviews_search():
     return sql_search_reviews()
 
-# app.run(debug=True)
+app.run(debug=True)
