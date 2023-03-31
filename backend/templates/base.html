@@ -82,6 +82,7 @@
 
     function filterText() {
       document.getElementById("answer-box").innerHTML = "";
+      document.getElementById("result-text").innerHTML = "Loading...";
       let recommendButton = document.querySelector(".recommend-button");
       
       const params = new URLSearchParams();
