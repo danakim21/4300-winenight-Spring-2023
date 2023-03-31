@@ -82,6 +82,7 @@
 
     function filterText() {
       document.getElementById("answer-box").innerHTML = "";
+      document.getElementById("result-text").innerHTML = "Loading...";
       let recommendButton = document.querySelector(".recommend-button");
       
       const params = new URLSearchParams();
@@ -104,7 +105,7 @@
               document.getElementById("result-text").innerHTML = "No results found. Please try typing different preferred flavors.";
           }
           else {
-            document.getElementById("result-text").innerHTML = `Our ${data.length} Recommendation(s) for you!`;
+            document.getElementById("result-text").innerHTML = `Our top ${data.length} Recommendation(s) for you!`;
             data.forEach((row) => {
 
               row.appellation = row.appellation.split(",")[0];
