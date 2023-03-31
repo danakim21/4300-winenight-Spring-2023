@@ -25,9 +25,18 @@ def sql_search_reviews():
     min_price = request.args.get("minPrice")
     max_price = request.args.get("maxPrice")
     category = request.args.get("category")
+    country = request.args.get("country")
+    appellation = request.args.get("appellation")
+    
 
     # Query 
-    query_sql = f"""SELECT * FROM {MYSQL_DATABASE}.wine_data WHERE price_numeric BETWEEN {min_price} AND {max_price} AND LOWER(category) = LOWER("{category}")"""
+    query_sql = f"""
+        SELECT * FROM {MYSQL_DATABASE}.wine_data 
+        WHERE price_numeric BETWEEN {min_price} AND {max_price} 
+        AND LOWER(category) = LOWER("{category}")
+        AND LOWER(country) = LOWER("{country}")
+        AND LOWER(SUBSTRING_INDEX(appellation, ",", 1)) = LOWER("{appellation}")
+        """
     keys = ["wine", "country", "winery", "category", "designation", "varietal", "appellation", "alcohol", "price", "rating", "reviewer", "review", "price_numeric", "price_range", "alcohol_numeric"]
     data = mysql_engine.query_selector(query_sql)
 
