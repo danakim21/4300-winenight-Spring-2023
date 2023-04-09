@@ -17,9 +17,9 @@
         <div class="similar-wines-title">
           <p class="similar-wines">Similar Wines</p>
         </div>
-        <div class="similar-input-box" onclick="sendFocus()">
+        <div class="similar-input-box" onclick="sendFocusSimilar()">
           <input placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio, Oak Grove 2012 Reserve Pinot Grigio"
-            id="filter-text-val">
+            id="filter-text-val-similar">
         </div>
         <div>
           <p class="inst">Use comma to separate multiple wines</p>
@@ -29,7 +29,7 @@
         <div>
           <p class="preferred-flavor">Preferred Flavor</p>
         </div>
-        <div class="preferred-input-box" onclick="sendFocus()">
+        <div class="preferred-input-box" onclick="sendFocusPreferred()">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
             id="filter-text-val-preferred">
@@ -40,6 +40,13 @@
       </div>
       <div class="filter">
         <p class="filter-label"> Add Filter(s)</p>
+        <!-- maybe there needs to be a container for these mood filter buttons? not sure -->
+        <button class="mood-button">Chill</button>
+        <button class="mood-button">Sexy</button>
+        <button class="mood-button">Restless</button>
+        <button class="mood-button">Sad</button>
+        <button class="mood-button">Angry</button>
+        <button class="mood-button">Low Energy</button>
       </div>
 
     </div>
@@ -58,7 +65,7 @@
     let sortButton = document.getElementById("sort-button");
     let sortDirection = "none";
 
-    function answerBoxTemplate(name, price, category, varietal, appellation, country,review) {
+    function answerBoxTemplate(name, price, category, varietal, appellation, country, review) {
       return `<div class='output-content-div'>
                 <p class='output-title'>${name}</p>
                 <p class='output-price'>${price}</p>
@@ -76,7 +83,11 @@
 
     }
 
-    function sendFocus() {
+    function sendFocusSimilar() {
+      document.getElementById('filter-text-val-similar').focus()
+    }
+
+    function sendFocusPreferred() {
       document.getElementById('filter-text-val-preferred').focus()
     }
 
@@ -84,7 +95,7 @@
       document.getElementById("answer-box").innerHTML = "";
       document.getElementById("result-text").innerHTML = "Loading...";
       let recommendButton = document.querySelector(".recommend-button");
-      
+
       const params = new URLSearchParams();
       const flavors = document
         .getElementById("filter-text-val-preferred")
@@ -98,11 +109,16 @@
       params.append("country", "France") // TODO: CHANGE France TO ACTUAL COUNTRY FROM USER INPUT
       params.append("appellation", "Alsace") // TODO: CHANGE Alsace TO ACTUAL APPELLATION FROM USER INPUT
 
+      let moodButtons = document.querySelectorAll('.mood-button.active');
+      for (btn of moodButtons) {
+        params.append("mood", btn.innerText || btn.textContent);
+      };
+
       fetch("/wine_reviews?" + params.toString())
         .then((response) => response.json())
         .then((data) => {
           if (data.length === 0) {
-              document.getElementById("result-text").innerHTML = "No results found. Please try typing different preferred flavors.";
+            document.getElementById("result-text").innerHTML = "No results found. Please try typing different preferred flavors.";
           }
           else {
             document.getElementById("result-text").innerHTML = `Our top ${data.length} Recommendation(s) for you!`;
@@ -120,13 +136,21 @@
                 row.country,
                 row.review
               );
-              document.getElementById("answer-box").appendChild(tempDiv);          
-          });
+              document.getElementById("answer-box").appendChild(tempDiv);
+            });
           }
         });
     }
 
-
+    // Event listener to toggle mood filters on and off
+    // https://dev.to/nicm42/how-to-make-a-button-looked-like-it-s-staying-pressed-down-58k#:~:text=You%20can%20use%20a%20normal,button')%3B%20button.
+    // https://www.codeinwp.com/snippets/add-event-listener-to-multiple-elements-with-javascript/#:~:text=%7D)(i)%3B%20%7D-,Adding%20an%20Event%20Listener%20to%20Multiple%20Elements%20Using%20a%20for,loop%20back%20into%20the%20function.
+    let moodButtons = document.querySelectorAll('.mood-button');
+    for (btn of moodButtons) {
+      btn.addEventListener('click', function () {
+        this.classList.toggle('active');
+      });
+    }
 
   </script>
 </body>
