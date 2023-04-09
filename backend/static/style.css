@@ -19,7 +19,7 @@
   margin: 68px 612px 51px 591px;
 }
 
-.search-box {
+#search-box {
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -28,6 +28,12 @@
     0px 0px 4px -1px rgba(0, 0, 0, 0.06);
   flex-direction: column;
   margin-bottom: 29px;
+  width: 994px;
+  height: 360px;
+}
+
+#search-box.expanded {
+  height: 540px;
 }
 
 .similar-wines-title {
@@ -90,18 +96,128 @@
   outline: 0;
 }
 
-/*
-.preferred-input-box img {
-    height: 20px;
-    width: 20px;
-}*/
+.filter {
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+}
 
-/*
-.top-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}*/
+.filter-button {
+  color: #c53030;
+  align-items: left;
+  position: relative;
+  width: 112px;
+  height: 24px;
+  border-bottom: 1px solid #c53030;
+}
+
+.filter-button::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-bottom: 2px solid #c53030;
+  border-right: 2px solid #c53030;
+  transform: rotate(45deg);
+  top: 50%;
+  right: 3px;
+  margin-top: -7px;
+}
+
+.title-box {
+  display: flex;
+  line-height: 20px;
+  width: 184px;
+  height: 20px;
+}
+
+.additional-filters {
+  position: absolute;
+
+}
+
+.add-title {
+  display: flex;
+  color: rgba(0, 0, 0, 0.64);
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 8px;
+}
+
+.additional-filters.open {
+  display: block;
+}
+
+.add-first-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.add-second-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.add-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 100%;
+  left: 0;
+  width: 100%;
+
+  padding: 8px;
+  z-index: 1;
+  height: 64px;
+}
+
+.add-input-box {
+  margin-left: 8px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+  height: 36px;
+}
+
+.add-input-box input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 4px;
+  height: 36px;
+}
+
+.category {
+  width: 184px;
+}
+
+.varietal {
+  width: 234px;
+}
+
+.country {
+  width: 193px;
+}
+
+.region {
+  width: 217px;
+}
+
+.price {
+  width: 450px;
+}
+
+.keywords {
+  width: 450px;
+}
+
 
 button {
   border: none;
@@ -110,7 +226,6 @@ button {
 .recommend-button {
   border-radius: 6px;
   display: flex;
-  align-items: center;
   flex-direction: row;
   padding: 10px 24px;
   width: 157px;
@@ -121,10 +236,11 @@ button {
   color: #ffffff;
   font-family: 'Inter';
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 18px;
   line-height: 28px;
   cursor: pointer;
+  align-items: center;
 }
 
 #result-text {
@@ -320,14 +436,6 @@ button {
   font-family: 'Montserrat', sans-serif;
 }
 
-.filter {
-  width: 100%;
-  color: #c53030;
-}
-
-.filter-label {
-  align-items: left;
-}
 
 strong {
   font-weight: bold;
