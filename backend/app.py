@@ -29,15 +29,34 @@ def sql_search_reviews():
     country = request.args.get("country")
     appellation = request.args.get("appellation")
     mood = request.args.getlist("mood")
+    wine_param = request.args.get('wine')
+    wine_names = [w.strip() for w in wine_param.split(',')] if wine_param else None
 
     # Query 
     query_sql = f"""
         SELECT * FROM {MYSQL_DATABASE}.wine_data 
-        WHERE price_numeric BETWEEN {min_price} AND {max_price} 
-        AND LOWER(category) = LOWER("{category}")
-        AND LOWER(country) = LOWER("{country}")
-        AND LOWER(SUBSTRING_INDEX(appellation, ",", 1)) = LOWER("{appellation}")
+        WHERE 1=1
         """
+    
+    if min_price is not None:
+        query_sql += f" AND price_numeric >= {min_price}"
+
+    if max_price is not None:
+        query_sql += f" AND price_numeric <= {max_price}"
+
+    if category:
+        query_sql += f" AND LOWER(category) = LOWER('{category}')"
+
+    if country:
+        query_sql += f" AND LOWER(country) = LOWER('{country}')"
+
+    if appellation:
+        query_sql += f" AND LOWER(SUBSTRING_INDEX(appellation, ',', 1)) = LOWER('{appellation}')"
+        
+    if wine_names:
+        wine_list = ", ".join([f'"{w.lower()}"' for w in wine_names])
+        query_sql += f" AND (LOWER(wine) IN ({wine_list}) OR LENGTH(TRIM(wine)) = 0)"
+
     keys = ["wine", "country", "winery", "category", "designation", "varietal", "appellation", "alcohol", "price", "rating", "reviewer", "review", "price_numeric", "price_range", "alcohol_numeric"]
     data = mysql_engine.query_selector(query_sql)
 
