@@ -1,9 +1,9 @@
 import json
-import os
 from flask import Flask, render_template, request
 from flask_cors import CORS
 from db import mysql_engine, MYSQL_DATABASE
-from helpers.FlavorKeywordsExtractor import FlavorKeywords
+
+from helpers.SimilarWines import SimilarWines
 from helpers.FlavorTypoCorrector import FlavorTypoCorrector
 from helpers.booleanSearch import boolean_search
 from helpers.moodFilter import mood_filter
@@ -68,5 +68,32 @@ def wine_search():
 @app.route("/wine_reviews")
 def wine_reviews_search():
     return sql_search_reviews()
+
+@app.route("/similar_wines")
+def similar_wine_search():
+    wine_name = request.args.get("wine_name")
+    sw = SimilarWines(wine_name)
+    results = []
+    for score, msg_id in sw.search_results[1:11]:
+        wine_name = sw.get_wine_name_from_id(msg_id)
+        wine_metadata = sw.get_wine_metadata(wine_name)
+        price = wine_metadata["price"]
+        category = wine_metadata["category"]
+        varietal = wine_metadata["varietal"]
+        appellation = wine_metadata["appellation"]
+        country = wine_metadata["country"]
+        results.append({
+        "score": score,
+        "wine_name": wine_name,
+        "price": price,
+        "category": category,
+        "varietal": varietal,
+        "appellation": appellation,
+        "country": country
+        })
+
+    return json.dumps(results)
+
+
 
 app.run(debug=True)
