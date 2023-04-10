@@ -6,6 +6,7 @@ from db import mysql_engine, MYSQL_DATABASE
 from helpers.SimilarWines import SimilarWines
 from helpers.FlavorTypoCorrector import FlavorTypoCorrector
 from helpers.booleanSearch import boolean_search
+from helpers.moodFilter import mood_filter
 
 # Path to init.sql file. This file can be replaced with your own file for testing on localhost, but do NOT move the init.sql file
 mysql_engine.load_file_into_db()
@@ -27,7 +28,7 @@ def sql_search_reviews():
     category = request.args.get("category")
     country = request.args.get("country")
     appellation = request.args.get("appellation")
-    
+    mood = request.args.getlist("mood")
 
     # Query 
     query_sql = f"""
@@ -46,8 +47,13 @@ def sql_search_reviews():
 
     # Get results using boolean search 
     results = boolean_search(data, keys, flavors)
+
+    # Filter results by mood
+    if mood:
+        results = mood_filter(results, mood)
     
     results = results[:10]
+
     return json.dumps(results)
 
 @app.route("/")

@@ -36,7 +36,7 @@
         <div>
           <p class="preferred-flavor">Preferred Flavor</p>
         </div>
-        <div class="preferred-input-box" onclick="sendFocus()">
+        <div class="preferred-input-box" onclick="sendFocusPreferred()">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
             id="filter-text-val-preferred"
@@ -47,7 +47,14 @@
         </div>
       </div>
       <div class="filter">
-        <p class="filter-label">Add Filter(s)</p>
+        <p class="filter-label"> Add Filter(s)</p>
+        <!-- maybe there needs to be a container for these mood filter buttons? not sure -->
+        <button class="mood-button">Chill</button>
+        <button class="mood-button">Sexy</button>
+        <button class="mood-button">Restless</button>
+        <button class="mood-button">Sad</button>
+        <button class="mood-button">Angry</button>
+        <button class="mood-button">Low Energy</button>
       </div>
     </div>
     <button class="recommend-button" onclick="filterText()">Recommend</button>
@@ -145,6 +152,11 @@
         params.append("category", "White"); // TODO: CHANGE White TO ACTUAL CATEGORY FROM USER INPUT
         params.append("country", "France"); // TODO: CHANGE France TO ACTUAL COUNTRY FROM USER INPUT
         params.append("appellation", "Alsace"); // TODO: CHANGE Alsace TO ACTUAL APPELLATION FROM USER INPUT
+        
+        let moodButtons = document.querySelectorAll('.mood-button.active');
+        for (btn of moodButtons) {
+          params.append("mood", btn.innerText || btn.textContent);
+        };
 
         fetch("/wine_reviews?" + params.toString())
           .then((response) => response.json())
@@ -173,6 +185,16 @@
             }
           });
       }
+    }
+    
+    // Event listener to toggle mood filters on and off
+    // https://dev.to/nicm42/how-to-make-a-button-looked-like-it-s-staying-pressed-down-58k#:~:text=You%20can%20use%20a%20normal,button')%3B%20button.
+    // https://www.codeinwp.com/snippets/add-event-listener-to-multiple-elements-with-javascript/#:~:text=%7D)(i)%3B%20%7D-,Adding%20an%20Event%20Listener%20to%20Multiple%20Elements%20Using%20a%20for,loop%20back%20into%20the%20function.
+    let moodButtons = document.querySelectorAll('.mood-button');
+    for (btn of moodButtons) {
+      btn.addEventListener('click', function () {
+        this.classList.toggle('active');
+      });
     }
   </script>
 </body>
