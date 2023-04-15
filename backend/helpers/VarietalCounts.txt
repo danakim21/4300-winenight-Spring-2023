@@ -1,0 +1,154 @@
+26224: red
+14383: blend
+14378: blends
+12983: sauvignon
+12413: pinot
+10765: noir
+9395: cabernet
+9341: white
+9147: chardonnay
+7141: style
+5845: blanc
+5337: sparkling
+5236: bordeaux
+4516: italian
+4183: riesling
+3310: portuguese
+2993: rosé
+2888: tempranillo
+2763: sangiovese
+2623: merlot
+2447: zinfandel
+2160: other
+1905: rhône
+1899: malbec
+1781: nebbiolo
+1371: champagne
+1293: gewürztraminer
+1159: franc
+1158: grenache
+973: veltliner
+962: grüner
+901: viognier
+883: grigio
+861: spanish
+798: port
+705: muscat
+665: petite
+664: sirah
+642: gamay
+640: glera
+521: albariño
+508: barbera
+505: chenin
+481: carmenère
+468: corvina
+452: molinara
+450: rondinella
+443: grosso
+429: nero
+336: garnacha
+331: mourvèdre
+327: petit
+311: moscato
+289: verdejo
+288: d
+280: avola
+260: aglianico
+244: verdot
+231: meritage
+222: prosecco, torrontés
+215: greek
+207: melon
+196: touriga
+190: garganega
+189: nacional
+188: tinta
+185: vermentino
+184: blaufränkisch, primitivo
+180: montepulciano
+176: roussanne
+166: sherry, sémillon
+164: g, m, s
+161: de
+156: toro
+154: zweigelt
+150: dolcetto, mencía
+143: verdicchio
+134: carignan
+131: bianco, viura
+123: turbiana
+120: friulano, monastrell
+116: fiano, semillon
+111: tannat
+109: vernaccia
+105: alvarinho
+104: nerello, syrah
+101: manseng, mascalese, pinotage
+97: greco
+91: bonarda
+85: grillo, sagrantino
+82: marsanne
+78: tinto
+77: rosato
+72: godello
+71: malvasia
+70: arneis, falanghina, lambrusco
+69: lagrein
+68: rosado
+67: gialla, negroamaro, ribolla
+65: st
+64: fino, laurent, spätburgunder
+62: arinto
+61: di
+59: moscatel, vidal
+56: cortese
+55: agiorgitiko, gros
+54: fumé
+52: austrian
+51: colombard
+50: alicante, verdelho
+48: alsace
+47: trebbiano
+46: bouschet
+45: blanca, pedro, ximénez
+42: buy, now
+40: furmint, sylvaner
+39: assyrtico, meunier
+37: and, graciano, pecorino
+36: müller, thurgau, weissburgunder
+35: cinsault
+34: carricante, silvaner
+33: frappato, traminer
+32: moschofilero, saperavi
+31: auxerrois, canelli, lemberger
+30: fernão, pires
+29: castelão, encruzado
+28: teroldego, xinomavro
+27: carignane, claret, macabeo, provence
+26: baga, cannonau, dornfelder, rkatsiteli, troia
+25: tocai
+24: charbono, kerner, loureiro
+23: muskateller, tokaji, zibibbo
+22: bobal, insolia, jacquère, muskat, scheurebe, welschriesling
+21: aligoté, gentile, picolit, prugnolo, schiava, trincadeira
+20: gelber, inzolia, palomino, shiraz
+19: lo, ottonel, xarel
+18: del, ugni
+17: albana, catarratto, chambourcin, hondarrabi, passerina, zuri
+16: assyrtiko, bianca, brachetto, muscadelle, orange, pallagrello, rotgipfler, seyval
+15: antão, grasparossa, pais, picpoul, savagnin, sorbara, vaz
+14: alfrocheiro, coda, gris, negrette, norton, picudo, prieto, volpe
+13: giallo, kalecik, karasi, mondeuse, piedirosso
+12: baco, bical, carignano, fina, gaglioppo, madeira, pansa, raboso, zierfandler
+11: grechetto, mali, plavac, uva
+10: mataro, roter, ruché, siria, trepat, vignoles
+9: black, counoise, durella, kekfrankos, malagousia, traminette
+8: blanco, feteasca, manzoni, neagra, nosiola, okuzgozu, refosco, roriz, tintorera, trousseau
+7: chasselas, mauzac, mavrud, narince, tokay, verduzzo
+6: altesse, avesso, bois, bual, cesanese, du, duras, jaen, mavrodaphne, mission, morillon, teran
+5: affile, aragonez, aragonês, feteascǎ, franca, grecanico, istriana, kisi, l, loin, malagouzia, mantonico, maturana, nera, neuburger, oeil, perricone, posip, prié, regalǎ, roditis, sousão, susumaniello, valdiguié, verdeca
+4: aleatico, babić, boğazkere, braucol, carineña, códega, do, edelzwicker, hamburg, larinho, marselan, mazuelo, nascetta, robola, rolle, roxo, savatiano, spoletino, symphony, timorasso, vilana, viosinho
+3: abouriou, airen, alejandría, alexandria, alexandrie, argaman, azal, barroca, bovale, canaiolo, cappuccio, casavecchia, cerceal, ciliegiolo, elbling, emir, francisca, incrocio, jacquez, johannisberg, lugana, mansois, marzemino, monica, moscadello, mtsvane, nielluciu, nuragus, of, pignoletto, poulsard, pugnitello, rivaner, romorantin, vitovska, vranec
+2: alvarelhão, angevine, ansonica, bastardo, blauer, bombino, candia, cayuga, chancellor, chelois, chinuri, clairette, debit, durif, fer, freisa, gomes, gragnano, grains, graúdo, grolleau, hárslevelü, kadarka, madeleine, magliocco, malvar, mandilaria, marawi, maria, marquette, miúda, monukka, moravia, muscadine, muscatel, nasco, papaskarasi, petits, pfeffer, plyto, portugieser, rabigato, rara, rebo, rebula, rieslaner, rosa, rufete, sciaccerellu, servadou, souzao, sämling, treixadura, trollinger, vespolina, vinhão, yapincak, zlahtina, à
+1: aidani, albanello, albarossa, amarela, asprinio, athiri, biancale, biancolella, blauburger, blauburgunder, cao, caprettone, carcajolu, catalanesca, centesimino, cercial, chardonel, cococciola, colorino, courbu, dafni, diamond, doña, erbaluce, favorita, forcallà, francisa, franconia, frankovka, früburgunder, gamza, gouveio, graševina, grignolino, groppello, irsai, jampal, kangoun, karasakiz, kinali, kotsifali, listán, mavrokalavryta, mavrotragano, mavroudi, merseguera, meseguera, misket, mole, morio, muscadel, musqué, negra, negro, noto, oliver, orangetraube, paralleda, parraleta, país, picapoll, pigato, pignolo, piquepoul, portuguiser, premsal, prunelard, ramisco, rosenmuskateller, rotaliano, ryzlink, rýnský, sacy, salamino, sauvignonasse, schwartzriesling, sercial, sideritis, sirica, tamianka, tamjanika, terrantez, thrapsathiri, tintilia, torbato, trajadura, uvalino, valvin, velasco, verdil, verdosilla, vespaiolo, vidadillo, vincent, xinisteri, xynisteri, žilavka
