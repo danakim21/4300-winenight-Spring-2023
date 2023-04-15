@@ -59,19 +59,18 @@
               <div class="title-box">
                 <p class="add-title">Category</p>
               </div>
-              <div class="add-input-box category">
-                <input placeholder="All" id="filter-text-val">
 
-                <!--
-              <script>
-                function toggleFilters() {
-                  var filters = document.querySelector('.additional-filters');
-                  filters.classList.toggle('open');
-                }
-              
-              </script>
-              -->
-              </div>
+              <select class="add-input-box category" id="filter-text-val">
+                <option value="all">All</option>
+                <option value="dessert">Dessert</option>
+                <option value="fortified">Fortified</option>
+                <option value="ps">Port/Sherry</option>
+                <option value="red">Red</option>
+                <option value="rose">Rose</option>
+                <option value="sparkling">Sparkling</option>
+                <option value="white">White</option>
+              </select>
+
             </div>
 
             <div class="add-box varietal">
@@ -120,16 +119,7 @@
               </div>
             </div>
 
-            <div class="add-box keywords">
-              <div class="title-box">
-                <p class="add-title">Keyword(s)</p>
-              </div>
-              <div class="add-input-box keywords">
-                <input placeholder="Hello,Bello,something" id="filter-text-val">
 
-
-              </div>
-            </div>
           </div>
         </div>
       </div>
