@@ -36,14 +36,23 @@
   height: 540px;
 }
 
+/*
 .similar-wines-title {
   height: 24px;
   width: 476px;
   margin: 32px 498px 8px 0px;
-}
 
-.similar-wines {
+  .similar-wines-title-box {
+  height: 24px;
+  width: 476px;
+}
+}*/
+
+
+.similar-wines-title {
   font-size: 16px;
+  margin: 0px;
+
 }
 
 .similar-input-box {
@@ -77,6 +86,14 @@
   color: #718096;
 }
 
+.preferred-flavor {
+  margin-top: 24px;
+}
+
+.preferred-flavor-title {
+  margin: 0px;
+}
+
 .preferred-input-box {
   border-radius: 6px;
   border: 1px solid #e2e8f0;
@@ -102,7 +119,7 @@
   position: relative;
 }
 
-.filter-button {
+#filter-button {
   color: #c53030;
   align-items: left;
   position: relative;
@@ -111,7 +128,7 @@
   border-bottom: 1px solid #c53030;
 }
 
-.filter-button::after {
+#filter-button::after {
   content: "";
   position: absolute;
   width: 6px;
@@ -122,6 +139,10 @@
   top: 50%;
   right: 3px;
   margin-top: -7px;
+}
+
+.search-box-edit {
+  height: 540px;
 }
 
 .title-box {

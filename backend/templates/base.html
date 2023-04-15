@@ -12,10 +12,21 @@
     <div class="logo">
       <img src="/static/images/logo-2.png" alt="winenight" />
     </div>
-    <div class="search-box">
-      <div class="similar-wines box">
-        <div class="similar-wines-title">
-          <p class="similar-wines">Similar Wines</p>
+
+    <div class="filter-mood">
+      <!-- maybe there needs to be a container for these mood filter buttons? not sure -->
+      <button class="mood-button">Chill</button>
+      <button class="mood-button">Sexy</button>
+      <button class="mood-button">Restless</button>
+      <button class="mood-button">Sad</button>
+      <button class="mood-button">Angry</button>
+      <button class="mood-button">Low Energy</button>
+    </div>
+
+    <div id="search-box">
+      <div class="similar-wines">
+        <div class="similar-wines-title-box">
+          <p class="similar-wines-title">Similar Wines</p>
         </div>
         <div class="similar-input-box" onclick="sendFocusSimilarWines()">
           <input placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio, Oak Grove 2012 Reserve Pinot Grigio"
@@ -25,9 +36,10 @@
           <p class="inst">Use comma to separate multiple wines</p>
         </div>
       </div>
-      <div class="preferred-flavor box">
+
+      <div class="preferred-flavor">
         <div>
-          <p class="preferred-flavor">Preferred Flavor</p>
+          <p class="preferred-flavor-title">Preferred Flavor</p>
         </div>
         <div class="preferred-input-box" onclick="sendFocusPreferred()">
           <input
@@ -38,16 +50,90 @@
           <p class="inst">Use comma to separate multiple keywords</p>
         </div>
       </div>
+
       <div class="filter">
-        <p class="filter-label">Add Filter(s)</p>
-        <!-- maybe there needs to be a container for these mood filter buttons? not sure -->
-        <button class="mood-button">Chill</button>
-        <button class="mood-button">Sexy</button>
-        <button class="mood-button">Restless</button>
-        <button class="mood-button">Sad</button>
-        <button class="mood-button">Angry</button>
-        <button class="mood-button">Low Energy</button>
+        <p id="filter-button"> Add Filter(s)</p>
+        <div class="additional-filters" style="display: none;">
+          <div class="add-first-row">
+            <div class="add-box category">
+              <div class="title-box">
+                <p class="add-title">Category</p>
+              </div>
+              <div class="add-input-box category">
+                <input placeholder="All" id="filter-text-val">
+
+                <!--
+              <script>
+                function toggleFilters() {
+                  var filters = document.querySelector('.additional-filters');
+                  filters.classList.toggle('open');
+                }
+              
+              </script>
+              -->
+              </div>
+            </div>
+
+            <div class="add-box varietal">
+              <div class="title-box">
+                <p class="add-title">Varietal</p>
+              </div>
+              <div class="add-input-box varietal">
+                <input placeholder="All" id="filter-text-val">
+
+
+              </div>
+            </div>
+
+            <div class="add-box country">
+              <div class="title-box">
+                <p class="add-title">Country of Origin</p>
+              </div>
+              <div class="add-input-box country">
+                <input placeholder="All" id="filter-text-val">
+
+
+              </div>
+            </div>
+
+            <div class="add-box region">
+              <div class="title-box">
+                <p class="add-title">Region</p>
+              </div>
+              <div class="add-input-box region">
+                <input placeholder="All" id="filter-text-val">
+
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="add-second-row">
+            <div class="add-box price">
+              <div class="title-box">
+                <p class="add-title">Price Range</p>
+              </div>
+              <div class="add-input-box price">
+                <input placeholder="All" id="filter-text-val">
+
+              </div>
+            </div>
+
+            <div class="add-box keywords">
+              <div class="title-box">
+                <p class="add-title">Keyword(s)</p>
+              </div>
+              <div class="add-input-box keywords">
+                <input placeholder="Hello,Bello,something" id="filter-text-val">
+
+
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
     <button class="recommend-button" onclick="filterText()">Recommend</button>
 
@@ -197,5 +283,9 @@
         this.classList.toggle("active");
       });
     }
+
+    document.querySelector('#filter-button').addEventListener('click', () => {
+      document.querySelector('#search-box').classList.add('search-box-edit');
+    }); 
   </script>
 </body>
