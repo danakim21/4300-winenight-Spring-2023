@@ -16,7 +16,7 @@
 .logo img {
   width: 237px;
   height: 67px;
-  margin: 68px 612px 51px 591px;
+  margin-top: 60px;
 }
 
 #search-box {
@@ -241,21 +241,104 @@ button {
   border: none;
 }
 
+.step-text {
+  
+  margin-bottom: 20px;
+  font-family: 'Jacques Francois';
+  font-size: 16pt;
+}
+
+.filter-mood{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 1054px;
+  gap: 24px;
+
+  margin-bottom: 40px;
+}
+
+
+.mood-title {
+  font-family: 'Jacques Francois';
+  height: 28px;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+
+  letter-spacing: -0.02em;
+  margin: 0px;
+  padding: 0px;
+}
+
+.mood-emoji{
+  width: 80px;
+  height: 80px;
+  font-size: 80pt;
+}
+
+.mood-desc{
+  width: 294px;
+  height: 24px;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  text-align: left;
+
+  margin: 0px;
+  padding: 0px;
+}
+
+.mood-text{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 6px;
+
+  width: 294px;
+  height: 80px;
+}
+
 .mood-button {
-  position: relative;
-  padding: 0.5em 1em;
-  border: 0;
-  border-radius: 0.5em;
-  background-color: pink;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-  cursor: pointer;
+
+ /* Auto layout */
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 32px 20px;
+  gap: 12px;
+
+  width: 330px;
+  height: 144px;
+
+  background: #FFFFFF;
+  /* 4300 */
+
+  box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.1), 0px 0px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+
 }
 
 .mood-button:active,
 .active {
   top: 2px;
   left: 1px;
-  box-shadow: none;
+  background: #C53030;
 }
 
 .recommend-button {
