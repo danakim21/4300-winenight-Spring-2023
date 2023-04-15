@@ -1,143 +1,73 @@
-<!doctype html>
+<!DOCTYPE html>
 <title>{% block title %}{% endblock %} Wine Night</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet">
+  rel="stylesheet" />
 
 <body>
   <div class="full-body-container">
     <div class="logo">
-      <img src="/static/images/logo-2.png" alt="winenight">
+      <img src="/static/images/logo-2.png" alt="winenight" />
     </div>
-    <div id="search-box">
-      <div class="similar-wines">
+    <div class="search-box">
+      <div class="similar-wines box">
         <div class="similar-wines-title">
           <p class="similar-wines">Similar Wines</p>
         </div>
-        <div class="similar-input-box" onclick="sendFocus()">
+        <div class="similar-input-box" onclick="sendFocusSimilarWines()">
           <input placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio, Oak Grove 2012 Reserve Pinot Grigio"
-            id="filter-text-val">
+            id="filter-text-val" />
         </div>
         <div>
           <p class="inst">Use comma to separate multiple wines</p>
         </div>
       </div>
-      <div class="preferred-flavor">
+      <div class="preferred-flavor box">
         <div>
           <p class="preferred-flavor">Preferred Flavor</p>
         </div>
-        <div class="preferred-input-box" onclick="sendFocus()">
+        <div class="preferred-input-box" onclick="sendFocusPreferred()">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
-            id="filter-text-val-preferred">
+            id="filter-text-val-preferred" />
         </div>
         <div>
           <p class="inst">Use comma to separate multiple keywords</p>
         </div>
       </div>
       <div class="filter">
-        <p class="filter-button"> Add Filter(s)</p>
-        <div class="additional-filters" style="display: block;">
-          <div class="add-first-row">
-            <div class="add-box category">
-              <div class="title-box">
-                <p class="add-title">Category</p>
-              </div>
-              <div class="add-input-box category">
-                <input placeholder="All" id="filter-text-val">
-
-                <!--
-                <script>
-                  function toggleFilters() {
-                    var filters = document.querySelector('.additional-filters');
-                    filters.classList.toggle('open');
-                  }
-                
-                </script>
-                -->
-              </div>
-            </div>
-
-            <div class="add-box varietal">
-              <div class="title-box">
-                <p class="add-title">Varietal</p>
-              </div>
-              <div class="add-input-box varietal">
-                <input placeholder="All" id="filter-text-val">
-
-
-              </div>
-            </div>
-
-            <div class="add-box country">
-              <div class="title-box">
-                <p class="add-title">Country of Origin</p>
-              </div>
-              <div class="add-input-box country">
-                <input placeholder="All" id="filter-text-val">
-
-
-              </div>
-            </div>
-
-            <div class="add-box region">
-              <div class="title-box">
-                <p class="add-title">Region</p>
-              </div>
-              <div class="add-input-box region">
-                <input placeholder="All" id="filter-text-val">
-
-
-              </div>
-            </div>
-
-          </div>
-
-          <div class="add-second-row">
-            <div class="add-box price">
-              <div class="title-box">
-                <p class="add-title">Price Range</p>
-              </div>
-              <div class="add-input-box price">
-                <input placeholder="All" id="filter-text-val">
-
-              </div>
-            </div>
-
-            <div class="add-box keywords">
-              <div class="title-box">
-                <p class="add-title">Keyword(s)</p>
-              </div>
-              <div class="add-input-box keywords">
-                <input placeholder="Hello,Bello,something" id="filter-text-val">
-
-
-              </div>
-            </div>
-          </div>
-        </div>
+        <p class="filter-label">Add Filter(s)</p>
+        <!-- maybe there needs to be a container for these mood filter buttons? not sure -->
+        <button class="mood-button">Chill</button>
+        <button class="mood-button">Sexy</button>
+        <button class="mood-button">Restless</button>
+        <button class="mood-button">Sad</button>
+        <button class="mood-button">Angry</button>
+        <button class="mood-button">Low Energy</button>
       </div>
-
     </div>
     <button class="recommend-button" onclick="filterText()">Recommend</button>
-
 
     <p id="result-text"></p>
     <!-- <button id="sort-button" onclick="sortPrice(this)" data-sort="asc">Sort Price (Low to High)</button> -->
     <div id="answer-box"></div>
-
-  </div>
   </div>
 
   <script>
-
     let sortButton = document.getElementById("sort-button");
     let sortDirection = "none";
 
-    function answerBoxTemplate(name, price, category, varietal, appellation, country, review) {
+    function answerBoxTemplate(
+      name,
+      price,
+      category,
+      varietal,
+      appellation,
+      country
+    ) {
       return `<div class='output-content-div'>
                 <p class='output-title'>${name}</p>
                 <p class='output-price'>${price}</p>
@@ -148,22 +78,23 @@
                   <p class='output-varietal'>${varietal}</p>
                 </div>
                 <div class="output-region-div">
-                  <p class='output-appellation'>📍 ${appellation ? appellation + ", " : ""}</p>
+                  <p class='output-appellation'>📍 ${appellation ? appellation + ", " : ""
+        }</p>
                   <p class='output-country'> &nbsp;${country}</p>
                 <div>
             </div>`;
-
     }
 
     function sendFocus() {
-      document.getElementById('filter-text-val-preferred').focus()
+      document.getElementById("filter-text-val-preferred").focus();
     }
 
-    function filterText() {
-      document.getElementById("answer-box").innerHTML = "";
-      document.getElementById("result-text").innerHTML = "Loading...";
-      let recommendButton = document.querySelector(".recommend-button");
+    function sendFocusSimilarWines() {
+      document.getElementById("filter-text-val").focus();
+    }
 
+    function performFlavorSearch(wine_names = null) {
+      console.log("Wine Names", wine_names);
       const params = new URLSearchParams();
       const flavors = document
         .getElementById("filter-text-val-preferred")
@@ -171,22 +102,45 @@
       flavors.forEach((keyword) => {
         params.append("flavors", keyword.trim());
       });
-      params.append("minPrice", 20); // TODO: CHANGE 20 TO ACTUAL MIN PRICE FROM USER INPUT
-      params.append("maxPrice", 50); // TODO: CHANGE 50 TO ACTUAL MAX PRICE FROM USER INPUT
-      params.append("category", "White") // TODO: CHANGE White TO ACTUAL CATEGORY FROM USER INPUT
-      params.append("country", "France") // TODO: CHANGE France TO ACTUAL COUNTRY FROM USER INPUT
-      params.append("appellation", "Alsace") // TODO: CHANGE Alsace TO ACTUAL APPELLATION FROM USER INPUT
+      // params.append("minPrice", 20); // TODO: CHANGE 20 TO ACTUAL MIN PRICE FROM USER INPUT
+      // params.append("maxPrice", 50); // TODO: CHANGE 50 TO ACTUAL MAX PRICE FROM USER INPUT
+      // params.append("category", "White"); // TODO: CHANGE White TO ACTUAL CATEGORY FROM USER INPUT
+      // params.append("country", "France"); // TODO: CHANGE France TO ACTUAL COUNTRY FROM USER INPUT
+      // params.append("appellation", "Alsace"); // TODO: CHANGE Alsace TO ACTUAL APPELLATION FROM USER INPUT
+
+      let moodButtons = document.querySelectorAll(".mood-button.active");
+      for (btn of moodButtons) {
+        params.append("mood", btn.innerText || btn.textContent);
+      }
+
+      // If wine_names is not null, add it to the query parameters
+      if (wine_names) {
+        const encodedWines = wine_names
+          .map((wine) => encodeURIComponent(wine))
+          .join(",");
+        params.append("wine", wine_names.join(","));
+      }
 
       fetch("/wine_reviews?" + params.toString())
         .then((response) => response.json())
         .then((data) => {
           if (data.length === 0) {
-            document.getElementById("result-text").innerHTML = "No results found. Please try typing different preferred flavors.";
-          }
-          else {
-            document.getElementById("result-text").innerHTML = `Our top ${data.length} Recommendation(s) for you!`;
+            document.getElementById("result-text").innerHTML =
+              "No results found. Please try typing different preferred flavors.";
+          } else {
+            if (wine_names) {
+              // Sort the data based on the order of wine_names
+              const sortedData = [];
+              wine_names.forEach((name) => {
+                const foundWine = data.find((wine) => wine.wine === name);
+                if (foundWine) sortedData.push(foundWine);
+              });
+              data = sortedData;
+            }
+            document.getElementById(
+              "result-text"
+            ).innerHTML = `Our top ${data.length} Recommendation(s) for you!`;
             data.forEach((row) => {
-
               row.appellation = row.appellation.split(",")[0];
               let tempDiv = document.createElement("div");
               tempDiv.classList.add("output-card");
@@ -196,8 +150,7 @@
                 row.category,
                 row.varietal,
                 row.appellation,
-                row.country,
-                row.review
+                row.country
               );
               document.getElementById("answer-box").appendChild(tempDiv);
             });
@@ -205,11 +158,44 @@
         });
     }
 
-    function expandBox() {
-      var box = document.getElementById("search-box");
-      box.classList.toggle("expanded");
+    function filterText() {
+      document.getElementById("answer-box").innerHTML = "";
+      document.getElementById("result-text").innerHTML = "Loading...";
+      let recommendButton = document.querySelector(".recommend-button");
+
+      const wine_name = document.getElementById("filter-text-val");
+
+      if (wine_name.value != "") {
+        fetch(`/similar_wines?wine_name=${encodeURIComponent(wine_name.value)}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.length === 0) {
+              // If no similar wines found, perform the flavor search on all wines
+              performFlavorSearch();
+            } else {
+              // If similar wines found, perform the flavor search on those wines
+              console.log(data);
+              const wine_names = data.map((row) => row.wine_name);
+              performFlavorSearch(wine_names);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        // If no wine name inputted, perform the flavor search on all wines
+        performFlavorSearch();
+      }
     }
 
-
+    // Event listener to toggle mood filters on and off
+    // https://dev.to/nicm42/how-to-make-a-button-looked-like-it-s-staying-pressed-down-58k#:~:text=You%20can%20use%20a%20normal,button')%3B%20button.
+    // https://www.codeinwp.com/snippets/add-event-listener-to-multiple-elements-with-javascript/#:~:text=%7D)(i)%3B%20%7D-,Adding%20an%20Event%20Listener%20to%20Multiple%20Elements%20Using%20a%20for,loop%20back%20into%20the%20function.
+    let moodButtons = document.querySelectorAll(".mood-button");
+    for (btn of moodButtons) {
+      btn.addEventListener("click", function () {
+        this.classList.toggle("active");
+      });
+    }
   </script>
 </body>

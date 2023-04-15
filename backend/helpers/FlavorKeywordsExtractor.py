@@ -16,7 +16,7 @@ class FlavorKeywords:
         self.reviews = self.get_all_reviews()
         self.word_counts = self.get_word_counts_sorted()
         self.flavor_words = self.get_flavor_words()
-        mysql_engine.load_file_into_db("/Users/junekim/Desktop/SP 2023/CS 4300/4300-winenight-Spring-2023/wine_dataset.sql")
+        mysql_engine.load_file_into_db("../init.sql")
 
     @staticmethod
     def tokenize(text):
