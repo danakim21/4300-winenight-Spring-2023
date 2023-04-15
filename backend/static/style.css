@@ -29,7 +29,7 @@
   flex-direction: column;
   margin-bottom: 29px;
   width: 994px;
-  height: 360px;
+
 }
 
 #search-box.expanded {
@@ -119,6 +119,7 @@
   position: relative;
 }
 
+
 #filter-button {
   color: #c53030;
   align-items: left;
@@ -152,10 +153,6 @@
   height: 20px;
 }
 
-.additional-filters {
-  position: absolute;
-
-}
 
 .add-title {
   display: flex;
@@ -168,8 +165,8 @@
   margin-bottom: 8px;
 }
 
-.additional-filters.open {
-  display: block;
+.additional-filters {
+  display: none;
 }
 
 .add-first-row {

@@ -53,7 +53,7 @@
 
       <div class="filter">
         <p id="filter-button"> Add Filter(s)</p>
-        <div class="additional-filters" style="display: none;">
+        <div class="additional-filters" id="additional-filters">
           <div class="add-first-row">
             <div class="add-box category">
               <div class="title-box">
@@ -285,7 +285,8 @@
     }
 
     document.querySelector('#filter-button').addEventListener('click', () => {
-      document.querySelector('#search-box').classList.add('search-box-edit');
+      document.querySelector('#search-box').classList.toggle('search-box-edit');
+      document.querySelector("#additional-filters").classList.toggle('additional-filters');
     }); 
   </script>
 </body>
