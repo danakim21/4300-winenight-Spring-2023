@@ -3,59 +3,218 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+  rel="stylesheet" />
 
 <body>
   <div class="full-body-container">
     <div class="logo">
       <img src="/static/images/logo-2.png" alt="winenight" />
     </div>
-    <div class="search-box">
-      <div class="similar-wines box">
-        <div class="similar-wines-title">
-          <p class="similar-wines">Similar Wines</p>
+
+    <p class="step-text"> Step 1. Select mood(s) you want for tonight</p>
+
+    <div class="filter-mood">
+      <!-- maybe there needs to be a container for these mood filter buttons? not sure -->
+      <button class="mood-button">
+        <img class="mood-emoji" src="/static/images/chill.png" />
+        <div class="mood-text">
+          <p class="mood-title">Chill</p>
+          <p class="mood-desc">Unwind your day</p>
+        </div>
+      </button>
+
+      <button class="mood-button">
+        <img class="mood-emoji" src="/static/images/sad.png" />
+        <div class="mood-text">
+          <p class="mood-title">Sad & Melancholy</p>
+          <p class="mood-desc">Lift your moods</p>
+        </div>
+      </button>
+
+      <button class="mood-button">
+        <img class="mood-emoji" src="/static/images/sexy.png" />
+        <div class="mood-text">
+          <p class="mood-title">Sexy & Playful</p>
+          <p class="mood-desc">Musky and floral</p>
+        </div>
+      </button>
+
+      <button class="mood-button">
+        <img class="mood-emoji" src="/static/images/angry.png" />
+        <div class="mood-text">
+          <p class="mood-title">Angry</p>
+          <p class="mood-desc">Cool you down</p>
+        </div>
+      </button>
+
+      <button class="mood-button">
+        <img class="mood-emoji" src="/static/images/wild.png" />
+        <div class="mood-text">
+          <p class="mood-title">Go Wild</p>
+          <p class="mood-desc">Venture to unknown</p>
+        </div>
+      </button>
+
+
+      <button class="mood-button">
+        <img class="mood-emoji" src="/static/images/energy.png" />
+        <div class="mood-text">
+          <p class="mood-title">Low Energy</p>
+          <p class="mood-desc">Boost up energy & vibes</p>
+        </div>
+      </button>
+
+    </div>
+
+    <p class="step-text"> Step 2. Tell me your preference!</p>
+    <div id="search-box">
+      <div class="similar-wines">
+        <div class="similar-wines-title-box">
+          <p class="similar-wines-title">Similar Wines</p>
         </div>
         <div class="similar-input-box" onclick="sendFocusSimilarWines()">
-          <input
-            placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio, Oak Grove 2012 Reserve Pinot Grigio"
-            id="filter-text-val"
-          />
+          <input placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio, Oak Grove 2012 Reserve Pinot Grigio"
+            id="filter-text-val" />
         </div>
         <div>
           <p class="inst">Use comma to separate multiple wines</p>
         </div>
       </div>
-      <div class="preferred-flavor box">
+
+      <div class="preferred-flavor">
         <div>
-          <p class="preferred-flavor">Preferred Flavor</p>
+          <p class="preferred-flavor-title">Preferred Flavor</p>
         </div>
         <div class="preferred-input-box" onclick="sendFocusPreferred()">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
-            id="filter-text-val-preferred"
-          />
+            id="filter-text-val-preferred" />
         </div>
         <div>
           <p class="inst">Use comma to separate multiple keywords</p>
         </div>
       </div>
+
       <div class="filter">
-        <p class="filter-label">Add Filter(s)</p>
-        <!-- maybe there needs to be a container for these mood filter buttons? not sure -->
-        <button class="mood-button">Chill</button>
-        <button class="mood-button">Sexy</button>
-        <button class="mood-button">Restless</button>
-        <button class="mood-button">Sad</button>
-        <button class="mood-button">Angry</button>
-        <button class="mood-button">Low Energy</button>
+        <p id="filter-button"> Add Filter(s)</p>
+        <div class="additional-filters" id="additional-filters">
+          <div class="add-first-row">
+            <div class="add-box category">
+
+              <div class="title-box category">
+                <p class="add-title">Category</p>
+              </div>
+
+              <select class="add-dropdown category">
+                <option value="all">All</option>
+                <option value="dessert">Dessert</option>
+                <option value="fortified">Fortified</option>
+                <option value="ps">Port/Sherry</option>
+                <option value="red">Red</option>
+                <option value="rose">Rose</option>
+                <option value="sparkling">Sparkling</option>
+                <option value="white">White</option>
+              </select>
+
+
+            </div>
+
+            <div class="add-box varietal">
+
+              <div class="title-box varietal">
+                <p class="add-title">Varietal</p>
+              </div>
+              <div class="add-input-box varietal">
+                <input placeholder="All">
+              </div>
+
+            </div>
+
+            <div class="add-box country">
+              <div class="title-box country">
+                <p class="add-title">Country of Origin</p>
+              </div>
+              <select class="add-dropdown country">
+                <option value="all">All</option>
+                <option value="argentina">Argentina</option>
+                <option value="armenia">Armenia</option>
+                <option value="australia">Australia</option>
+                <option value="austria">Austria</option>
+                <option value="brazil">Brazil</option>
+                <option value="bulgaria">Bulgaria</option>
+                <option value="canada">Canada</option>
+                <option value="chile">Chile</option>
+                <option value="china">China</option>
+                <option value="croatia">Croatia</option>
+                <option value="cyprus">Cyprus</option>
+                <option value="czech-republic">Czech Republic</option>
+                <option value="england">England</option>
+                <option value="france">France</option>
+                <option value="georgia">Georgia</option>
+                <option value="germany">Germany</option>
+                <option value="greece">Greece</option>
+                <option value="hungary">Hungary</option>
+                <option value="india">India</option>
+                <option value="israel">Israel</option>
+                <option value="italy">Italy</option>
+                <option value="lebanon">Lebanon</option>
+                <option value="luxembourg">Luxembourg</option>
+                <option value="macedonia">Macedonia</option>
+                <option value="mexico">Mexico</option>
+                <option value="moldova">Moldova</option>
+                <option value="morocco">Morocco</option>
+                <option value="new-zealand">New Zealand</option>
+                <option value="peru">Peru</option>
+                <option value="portugal">Portugal</option>
+                <option value="romania">Romania</option>
+                <option value="serbia">Serbia</option>
+                <option value="slovakia">Slovakia</option>
+                <option value="slovenia">Slovenia</option>
+                <option value="south-africa">South Africa</option>
+                <option value="spain">Spain</option>
+                <option value="switzerland">Switzerland</option>
+                <option value="turkey">Turkey</option>
+                <option value="ukraine">Ukraine</option>
+                <option value="uruguay">Uruguay</option>
+                <option value="us">US</option>
+              </select>
+            </div>
+
+            <div class="add-box region">
+              <div class="title-box region">
+                <p class="add-title">Region</p>
+              </div>
+              <div class="add-input-box region">
+                <input placeholder="All">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="add-second-row">
+            <div class="add-box price">
+              <div class="title-box price">
+                <p class="add-title">Price Range</p>
+              </div>
+              <div class="add-number price">
+                <div class="min-box">
+                  <p class="min">Min $</p>
+                  <input type="number" id="minPrice" placeholder="minimum">
+                </div>
+                <div class="max-box">
+                  <p class="max">Max $</p>
+                  <input type="number" id="maxPrice" placeholder="maximum">
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
       </div>
+
     </div>
     <button class="recommend-button" onclick="filterText()">Recommend</button>
 
@@ -86,9 +245,8 @@
                   <p class='output-varietal'>${varietal}</p>
                 </div>
                 <div class="output-region-div">
-                  <p class='output-appellation'>📍 ${
-                    appellation ? appellation + ", " : ""
-                  }</p>
+                  <p class='output-appellation'>📍 ${appellation ? appellation + ", " : ""
+        }</p>
                   <p class='output-country'> &nbsp;${country}</p>
                 <div>
             </div>`;
@@ -206,5 +364,10 @@
         this.classList.toggle("active");
       });
     }
+
+    document.querySelector('#filter-button').addEventListener('click', () => {
+      document.querySelector('#search-box').classList.toggle('search-box-edit');
+      document.querySelector("#additional-filters").classList.toggle('additional-filters');
+    }); 
   </script>
 </body>
