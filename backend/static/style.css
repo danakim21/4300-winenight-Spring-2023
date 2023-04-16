@@ -84,6 +84,7 @@
 .inst {
   font-size: 14px;
   color: #718096;
+  margin-bottom: 0px;
 }
 
 .preferred-flavor {
@@ -127,6 +128,8 @@
   width: 112px;
   height: 24px;
   border-bottom: 1px solid #c53030;
+  margin-bottom: 24px;
+  margin-top: 24px;
 }
 
 #filter-button::after {
@@ -149,9 +152,10 @@
 .title-box {
   display: flex;
   line-height: 20px;
-  width: 184px;
-  height: 20px;
+
 }
+
+
 
 
 .add-title {
@@ -173,14 +177,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 24px;
 }
 
 .add-second-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  padding: 0px;
+  margin-bottom: 32px;
 }
 
 .add-box {
@@ -190,14 +195,11 @@
   top: 100%;
   left: 0;
   width: 100%;
-
-  padding: 8px;
   z-index: 1;
   height: 64px;
 }
 
 .add-input-box {
-
   background-color: white;
   border-radius: 4px;
   border: 1px solid #e2e8f0;
@@ -211,6 +213,72 @@
   padding: 4px;
   height: 36px;
 }
+
+.add-dropdown {
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+  height: 45px;
+}
+
+.select option {
+  color: #2D3748;
+}
+
+input::placeholder {
+  color: #2D3748;
+
+}
+
+.add-number {
+  display: flex;
+}
+
+.min-box {
+  display: flex;
+  margin-right: 36px;
+}
+
+.max-box {
+  display: flex;
+}
+
+.max {
+  color: rgba(0, 0, 0, 0.36);
+  margin-right: 8px;
+}
+
+.min {
+  color: rgba(0, 0, 0, 0.36);
+  margin-right: 8px;
+}
+
+#maxPrice {
+  background-color: white;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  height: 40px;
+}
+
+#maxPrice::placeholder {
+  text-indent: 10px;
+}
+
+#minPrice {
+  background-color: white;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  height: 40px;
+}
+
+#minPrice::placeholder {
+  text-indent: 10px;
+}
+
+input[type="number"] {
+  font-size: 14px;
+}
+
 
 .category {
   width: 184px;
@@ -232,9 +300,6 @@
   width: 450px;
 }
 
-.keywords {
-  width: 450px;
-}
 
 
 button {
@@ -242,13 +307,13 @@ button {
 }
 
 .step-text {
-  
+
   margin-bottom: 20px;
   font-family: 'Jacques Francois';
   font-size: 16pt;
 }
 
-.filter-mood{
+.filter-mood {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -276,13 +341,13 @@ button {
   padding: 0px;
 }
 
-.mood-emoji{
+.mood-emoji {
   width: 80px;
   height: 80px;
   font-size: 80pt;
 }
 
-.mood-desc{
+.mood-desc {
   width: 294px;
   height: 24px;
 
@@ -295,7 +360,7 @@ button {
   padding: 0px;
 }
 
-.mood-text{
+.mood-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -309,7 +374,7 @@ button {
 
 .mood-button {
 
- /* Auto layout */
+  /* Auto layout */
 
   display: flex;
   flex-direction: row;

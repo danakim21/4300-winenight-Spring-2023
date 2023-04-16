@@ -18,56 +18,55 @@
     <div class="filter-mood">
       <!-- maybe there needs to be a container for these mood filter buttons? not sure -->
       <button class="mood-button">
-        <img class="mood-emoji" src="/static/images/chill.png"/>
-        <div class="mood-text"> 
+        <img class="mood-emoji" src="/static/images/chill.png" />
+        <div class="mood-text">
           <p class="mood-title">Chill</p>
           <p class="mood-desc">Unwind your day</p>
-      </div>
+        </div>
       </button>
 
       <button class="mood-button">
-        <img class="mood-emoji" src="/static/images/sad.png"/>
-        <div class="mood-text"> 
+        <img class="mood-emoji" src="/static/images/sad.png" />
+        <div class="mood-text">
           <p class="mood-title">Sad & Melancholy</p>
           <p class="mood-desc">Lift your moods</p>
-      </div>
+        </div>
       </button>
 
       <button class="mood-button">
-        <img class="mood-emoji" src="/static/images/sexy.png"/>
-        <div class="mood-text"> 
+        <img class="mood-emoji" src="/static/images/sexy.png" />
+        <div class="mood-text">
           <p class="mood-title">Sexy & Playful</p>
           <p class="mood-desc">Musky and floral</p>
-      </div>
+        </div>
       </button>
 
       <button class="mood-button">
-        <img class="mood-emoji" src="/static/images/angry.png"/>
-        <div class="mood-text"> 
+        <img class="mood-emoji" src="/static/images/angry.png" />
+        <div class="mood-text">
           <p class="mood-title">Angry</p>
           <p class="mood-desc">Cool you down</p>
-      </div>
+        </div>
       </button>
 
       <button class="mood-button">
-        <img class="mood-emoji" src="/static/images/wild.png"/>
-        <div class="mood-text"> 
+        <img class="mood-emoji" src="/static/images/wild.png" />
+        <div class="mood-text">
           <p class="mood-title">Go Wild</p>
           <p class="mood-desc">Venture to unknown</p>
-      </div>
+        </div>
       </button>
 
 
       <button class="mood-button">
-        <img class="mood-emoji" src="/static/images/energy.png"/>
-        <div class="mood-text"> 
+        <img class="mood-emoji" src="/static/images/energy.png" />
+        <div class="mood-text">
           <p class="mood-title">Low Energy</p>
           <p class="mood-desc">Boost up energy & vibes</p>
-      </div>
+        </div>
       </button>
 
     </div>
-
 
     <p class="step-text"> Step 2. Tell me your preference!</p>
     <div id="search-box">
@@ -103,11 +102,12 @@
         <div class="additional-filters" id="additional-filters">
           <div class="add-first-row">
             <div class="add-box category">
-              <div class="title-box">
+
+              <div class="title-box category">
                 <p class="add-title">Category</p>
               </div>
 
-              <select class="add-input-box category" id="filter-text-val">
+              <select class="add-dropdown category">
                 <option value="all">All</option>
                 <option value="dessert">Dessert</option>
                 <option value="fortified">Fortified</option>
@@ -118,38 +118,76 @@
                 <option value="white">White</option>
               </select>
 
+
             </div>
 
             <div class="add-box varietal">
-              <div class="title-box">
+
+              <div class="title-box varietal">
                 <p class="add-title">Varietal</p>
               </div>
               <div class="add-input-box varietal">
-                <input placeholder="All" id="filter-text-val">
-
-
+                <input placeholder="All">
               </div>
+
             </div>
 
             <div class="add-box country">
-              <div class="title-box">
+              <div class="title-box country">
                 <p class="add-title">Country of Origin</p>
               </div>
-              <div class="add-input-box country">
-                <input placeholder="All" id="filter-text-val">
-
-
-              </div>
+              <select class="add-dropdown country">
+                <option value="all">All</option>
+                <option value="argentina">Argentina</option>
+                <option value="armenia">Armenia</option>
+                <option value="australia">Australia</option>
+                <option value="austria">Austria</option>
+                <option value="brazil">Brazil</option>
+                <option value="bulgaria">Bulgaria</option>
+                <option value="canada">Canada</option>
+                <option value="chile">Chile</option>
+                <option value="china">China</option>
+                <option value="croatia">Croatia</option>
+                <option value="cyprus">Cyprus</option>
+                <option value="czech-republic">Czech Republic</option>
+                <option value="england">England</option>
+                <option value="france">France</option>
+                <option value="georgia">Georgia</option>
+                <option value="germany">Germany</option>
+                <option value="greece">Greece</option>
+                <option value="hungary">Hungary</option>
+                <option value="india">India</option>
+                <option value="israel">Israel</option>
+                <option value="italy">Italy</option>
+                <option value="lebanon">Lebanon</option>
+                <option value="luxembourg">Luxembourg</option>
+                <option value="macedonia">Macedonia</option>
+                <option value="mexico">Mexico</option>
+                <option value="moldova">Moldova</option>
+                <option value="morocco">Morocco</option>
+                <option value="new-zealand">New Zealand</option>
+                <option value="peru">Peru</option>
+                <option value="portugal">Portugal</option>
+                <option value="romania">Romania</option>
+                <option value="serbia">Serbia</option>
+                <option value="slovakia">Slovakia</option>
+                <option value="slovenia">Slovenia</option>
+                <option value="south-africa">South Africa</option>
+                <option value="spain">Spain</option>
+                <option value="switzerland">Switzerland</option>
+                <option value="turkey">Turkey</option>
+                <option value="ukraine">Ukraine</option>
+                <option value="uruguay">Uruguay</option>
+                <option value="us">US</option>
+              </select>
             </div>
 
             <div class="add-box region">
-              <div class="title-box">
+              <div class="title-box region">
                 <p class="add-title">Region</p>
               </div>
               <div class="add-input-box region">
-                <input placeholder="All" id="filter-text-val">
-
-
+                <input placeholder="All">
               </div>
             </div>
 
@@ -157,12 +195,18 @@
 
           <div class="add-second-row">
             <div class="add-box price">
-              <div class="title-box">
+              <div class="title-box price">
                 <p class="add-title">Price Range</p>
               </div>
-              <div class="add-input-box price">
-                <input placeholder="All" id="filter-text-val">
-
+              <div class="add-number price">
+                <div class="min-box">
+                  <p class="min">Min $</p>
+                  <input type="number" id="minPrice" placeholder="minimum">
+                </div>
+                <div class="max-box">
+                  <p class="max">Max $</p>
+                  <input type="number" id="maxPrice" placeholder="maximum">
+                </div>
               </div>
             </div>
 
