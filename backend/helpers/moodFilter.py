@@ -57,5 +57,5 @@ def mood_filter(results, mood):
                 # but the mood varietal is 'Champange')
                 filtered_results.append(wine_dict)
                 break
-    results.sort(key=lambda x: x['num_matches'], reverse=True)
+    results.sort(key=lambda x: x['total_score'], reverse=True)
     return filtered_results
