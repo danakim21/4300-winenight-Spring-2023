@@ -586,7 +586,7 @@ button {
 .output-country {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: end;
   padding: 0px;
   gap: 6px;
 
