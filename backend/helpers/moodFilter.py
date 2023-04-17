@@ -23,7 +23,7 @@ def mood_filter(results, mood):
         # 'Chambolle-Musigny' appears in wine names and appellations, but not varietals
         # 'Barbaresco' appears in wine names and appellations, but not varietals
         wine_types.update(['Cote du Rhone', 'Chateauneuf-du-Pape', 'Pinot Noir', 'Chambolle-Musigny', 'Barbaresco'])
-    elif "Restless" in mood_str:
+    elif "Wild" in mood_str:
         # There is only one wine with a varietal of 'Greco di Tufo'
         # 'Nero d\'Avola' appears in wine names as well as in part of a larger varietal (e.g. 'Nero d\'Avola, Italian Red')
         # 'Aglianico' appears as part of a larger varietal: 'Aglianico, Italian Red'
