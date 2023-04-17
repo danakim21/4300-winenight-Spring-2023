@@ -343,6 +343,7 @@ FLAVOR_KEYWORDS = [
     "bristling",
     "confectionary",
     "feminine",
+    "hot"
 ]
 
 
