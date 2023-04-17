@@ -3,14 +3,9 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+  rel="stylesheet" />
 
 <body>
   <div class="full-body-container">
@@ -79,15 +74,12 @@
         </div>
         <div class="similar-input-container" onclick="sendFocusSimilarWines()">
           <div class="similar-input-box">
-            <input
-              class="similar-input-box"
-              placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio, Oak Grove 2012 Reserve Pinot Grigio"
-              id="filter-text-val"
-            />
+            <input class="similar-input-box" placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio"
+              id="filter-text-val" />
           </div>
         </div>
         <div>
-          <p class="inst">Use comma to separate multiple wines</p>
+          <p class="inst">Please input one similar wine you want</p>
         </div>
       </div>
 
@@ -98,8 +90,7 @@
         <div class="preferred-input-box" onclick="sendFocusPreferred()">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
-            id="filter-text-val-preferred"
-          />
+            id="filter-text-val-preferred" />
         </div>
         <div>
           <p class="inst">Use comma to separate multiple keywords</p>
@@ -239,9 +230,8 @@
                     <p class='output-varietal'>${varietal}</p>
                   </div>
                   <div class="output-region-div">
-                    <p class='output-appellation'>📍 ${
-                      appellation ? appellation + ", " : ""
-                    }</p>
+                    <p class='output-appellation'>📍 ${appellation ? appellation + ", " : ""
+        }</p>
                     <p class='output-country'> &nbsp;${country}</p>
                   <div>
               </div>`;
