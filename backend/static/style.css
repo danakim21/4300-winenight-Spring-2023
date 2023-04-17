@@ -10,7 +10,7 @@
   justify-content: start;
   align-items: center;
   flex-direction: column;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .logo img {
@@ -133,7 +133,7 @@
 }
 
 #filter-button::after {
-  content: "";
+  content: '';
   position: absolute;
   width: 6px;
   height: 6px;
@@ -157,7 +157,7 @@
 .add-title {
   display: flex;
   color: rgba(0, 0, 0, 0.64);
-  font-family: "Inter";
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -272,7 +272,7 @@ input::placeholder {
   text-indent: 10px;
 }
 
-input[type="number"] {
+input[type='number'] {
   font-size: 14px;
 }
 
@@ -302,7 +302,7 @@ button {
 
 .step-text {
   margin-bottom: 20px;
-  font-family: "Jacques Francois";
+  font-family: 'Jacques Francois';
   font-size: 16pt;
 }
 
@@ -321,7 +321,7 @@ button {
 }
 
 .mood-title {
-  font-family: "Jacques Francois";
+  font-family: 'Jacques Francois';
   height: 28px;
 
   font-style: normal;
@@ -388,6 +388,13 @@ button {
   flex: none;
   order: 1;
   flex-grow: 0;
+
+  cursor: pointer;
+}
+
+.mood-button:hover {
+  background: #c63a3a2d;
+  transition: 0.3s;
 }
 
 .mood-button:active,
@@ -408,7 +415,7 @@ button {
   box-shadow: none;
   margin-top: 29px;
   color: #ffffff;
-  font-family: "Inter";
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -471,7 +478,7 @@ button {
 }
 
 .output-title {
-  font-family: "Jacques Francois";
+  font-family: 'Jacques Francois';
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -483,7 +490,7 @@ button {
 }
 
 .output-price {
-  font-family: "Jacques Francois";
+  font-family: 'Jacques Francois';
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -512,7 +519,7 @@ button {
 }
 
 .output-category {
-  font-family: "Inter";
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -540,7 +547,7 @@ button {
 }
 
 .output-varietal {
-  font-family: "Inter";
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -601,11 +608,11 @@ button {
 }
 
 .episode-title {
-  font-family: "Kanit", sans-serif;
+  font-family: 'Kanit', sans-serif;
 }
 
 .episode-desc {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 strong {
