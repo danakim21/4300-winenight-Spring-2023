@@ -47,6 +47,7 @@ class SimilarWines:
         return reviews
     
     def get_wine_metadata(self, wine_name):
+        wine_name = wine_name.replace("'", "''")
         query_sql = f"""SELECT price, category, varietal, appellation, country FROM {MYSQL_DATABASE}.wine_data WHERE wine = '{wine_name}'"""
         cursor = mysql_engine.query_selector(query_sql)
 
