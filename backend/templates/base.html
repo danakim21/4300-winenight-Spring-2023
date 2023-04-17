@@ -453,27 +453,33 @@
       let recommendButton = document.querySelector(".recommend-button");
 
       const wine_name = document.getElementById("filter-text-val");
+      let moodButtons = document.querySelectorAll(".mood-button.active");
 
-      if (wine_name.value != "") {
-        fetch(`/similar_wines?wine_name=${encodeURIComponent(wine_name.value)}`)
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.length === 0) {
-              // If no similar wines found, perform the flavor search on all wines
-              performFlavorSearch();
-            } else {
-              // If similar wines found, perform the flavor search on those wines
-              console.log(data);
-              const wine_names = data.map((row) => row.wine_name);
-              performFlavorSearch(wine_names);
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      if (moodButtons.length > 0) {
+        if (wine_name.value != "") {
+          fetch(`/similar_wines?wine_name=${encodeURIComponent(wine_name.value)}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.length === 0) {
+                // If no similar wines found, perform the flavor search on all wines
+                performFlavorSearch();
+              } else {
+                // If similar wines found, perform the flavor search on those wines
+                console.log(data);
+                const wine_names = data.map((row) => row.wine_name);
+                performFlavorSearch(wine_names);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else {
+          // If no wine name inputted, perform the flavor search on all wines
+          performFlavorSearch();
+        }
       } else {
-        // If no wine name inputted, perform the flavor search on all wines
-        performFlavorSearch();
+        document.getElementById("result-text").innerHTML =
+          "Please select at least one mood before pressing \"Recommend\".";
       }
     }
 
