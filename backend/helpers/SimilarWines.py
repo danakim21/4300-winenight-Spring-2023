@@ -136,6 +136,9 @@ class SimilarWines:
         return doc_scores
     
     def index_search(self, query, index, idf, doc_norms, score_func=accumulate_dot_scores, tokenizer=tt()):
+        if query is None:
+            return []
+        
         # Tokenize query
         query_words = tokenizer.tokenize(query.lower())
         

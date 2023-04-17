@@ -3,9 +3,14 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet" />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+  rel="stylesheet"
+/>
 
 <body>
   <div class="full-body-container">
@@ -74,8 +79,11 @@
         </div>
         <div class="similar-input-container" onclick="sendFocusSimilarWines()">
           <div class="similar-input-box">
-            <input class="similar-input-box" placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio"
-              id="filter-text-val" />
+            <input
+              class="similar-input-box"
+              placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio"
+              id="filter-text-val"
+            />
           </div>
         </div>
         <div>
@@ -90,7 +98,8 @@
         <div class="preferred-input-box" onclick="sendFocusPreferred()">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
-            id="filter-text-val-preferred" />
+            id="filter-text-val-preferred"
+          />
         </div>
         <div>
           <p class="inst">Use comma to separate multiple keywords</p>
@@ -230,8 +239,9 @@
                     <p class='output-varietal'>${varietal}</p>
                   </div>
                   <div class="output-region-div">
-                    <p class='output-appellation'>📍 ${appellation ? appellation + ", " : ""
-        }</p>
+                    <p class='output-appellation'>📍 ${
+                      appellation ? appellation + ", " : ""
+                    }</p>
                     <p class='output-country'> &nbsp;${country}</p>
                   <div>
               </div>`;
@@ -457,12 +467,22 @@
 
       if (moodButtons.length > 0) {
         if (wine_name.value != "") {
-          fetch(`/similar_wines?wine_name=${encodeURIComponent(wine_name.value)}`)
+          fetch(
+            `/similar_wines?wine_name=${encodeURIComponent(wine_name.value)}`
+          )
             .then((response) => response.json())
             .then((data) => {
               if (data.length === 0) {
                 // If no similar wines found, perform the flavor search on all wines
-                performFlavorSearch();
+                if (document.getElementById("filter-text-val").value) {
+                  const similar_input =
+                    document.getElementById("filter-text-val").value;
+                  document.getElementById(
+                    "result-text"
+                  ).innerHTML = `No Wines Similar to ${similar_input} were found.`;
+                } else {
+                  performFlavorSearch();
+                }
               } else {
                 // If similar wines found, perform the flavor search on those wines
                 console.log(data);
@@ -479,7 +499,7 @@
         }
       } else {
         document.getElementById("result-text").innerHTML =
-          "Please select at least one mood before pressing \"Recommend\".";
+          'Please select at least one mood before pressing "Recommend".';
       }
     }
 
