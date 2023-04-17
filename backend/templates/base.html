@@ -3,9 +3,14 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet" />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+  rel="stylesheet"
+/>
 
 <body>
   <div class="full-body-container">
@@ -13,7 +18,7 @@
       <img src="/static/images/logo-2.png" alt="winenight" />
     </div>
 
-    <p class="step-text"> Step 1. Select mood(s) you want for tonight</p>
+    <p class="step-text">Step 1. Select mood(s) you want for tonight</p>
 
     <div class="filter-mood">
       <!-- maybe there needs to be a container for these mood filter buttons? not sure -->
@@ -57,7 +62,6 @@
         </div>
       </button>
 
-
       <button class="mood-button">
         <img class="mood-emoji" src="/static/images/energy.png" />
         <div class="mood-text">
@@ -65,18 +69,22 @@
           <p class="mood-desc">Boost up energy & vibes</p>
         </div>
       </button>
-
     </div>
 
-    <p class="step-text"> Step 2. Tell me your preference!</p>
+    <p class="step-text">Step 2. Tell me your preference!</p>
     <div id="search-box">
       <div class="similar-wines">
         <div class="similar-wines-title-box">
           <p class="similar-wines-title">Similar Wines</p>
         </div>
-        <div class="similar-input-box" onclick="sendFocusSimilarWines()">
-          <input placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio, Oak Grove 2012 Reserve Pinot Grigio"
-            id="filter-text-val" />
+        <div class="similar-input-container" onclick="sendFocusSimilarWines()">
+          <div class="similar-input-box">
+            <input
+              class="similar-input-box"
+              placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio, Oak Grove 2012 Reserve Pinot Grigio"
+              id="filter-text-val"
+            />
+          </div>
         </div>
         <div>
           <p class="inst">Use comma to separate multiple wines</p>
@@ -90,7 +98,8 @@
         <div class="preferred-input-box" onclick="sendFocusPreferred()">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
-            id="filter-text-val-preferred" />
+            id="filter-text-val-preferred"
+          />
         </div>
         <div>
           <p class="inst">Use comma to separate multiple keywords</p>
@@ -98,11 +107,10 @@
       </div>
 
       <div class="filter">
-        <p id="filter-button"> Add Filter(s)</p>
+        <p id="filter-button">Add Filter(s)</p>
         <div class="additional-filters" id="additional-filters">
           <div class="add-first-row">
             <div class="add-box category">
-
               <div class="title-box category">
                 <p class="add-title">Category</p>
               </div>
@@ -117,19 +125,12 @@
                 <option value="sparkling">Sparkling</option>
                 <option value="white">White</option>
               </select>
-
-
             </div>
 
             <div class="add-box varietal">
-
               <div class="title-box varietal">
                 <p class="add-title">Varietal</p>
               </div>
-              <div class="add-input-box varietal">
-                <input placeholder="All">
-              </div>
-
             </div>
 
             <div class="add-box country">
@@ -186,11 +187,7 @@
               <div class="title-box region">
                 <p class="add-title">Region</p>
               </div>
-              <div class="add-input-box region">
-                <input placeholder="All">
-              </div>
             </div>
-
           </div>
 
           <div class="add-second-row">
@@ -201,20 +198,17 @@
               <div class="add-number price">
                 <div class="min-box">
                   <p class="min">Min $</p>
-                  <input type="number" id="minPrice" placeholder="minimum">
+                  <input type="number" id="minPrice" placeholder="minimum" />
                 </div>
                 <div class="max-box">
                   <p class="max">Max $</p>
-                  <input type="number" id="maxPrice" placeholder="maximum">
+                  <input type="number" id="maxPrice" placeholder="maximum" />
                 </div>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
-
     </div>
     <button class="recommend-button" onclick="filterText()">Recommend</button>
 
@@ -236,20 +230,21 @@
       country
     ) {
       return `<div class='output-content-div'>
-                <p class='output-title'>${name}</p>
-                <p class='output-price'>${price}</p>
-                <div class="output-line"></div>
-                <div class="output-category-div">
-                  <p class='output-category'>🍷 ${category}</p>
-                  <div class='output-category-line'></div>
-                  <p class='output-varietal'>${varietal}</p>
-                </div>
-                <div class="output-region-div">
-                  <p class='output-appellation'>📍 ${appellation ? appellation + ", " : ""
-        }</p>
-                  <p class='output-country'> &nbsp;${country}</p>
-                <div>
-            </div>`;
+                  <p class='output-title'>${name}</p>
+                  <p class='output-price'>${price}</p>
+                  <div class="output-line"></div>
+                  <div class="output-category-div">
+                    <p class='output-category'>🍷 ${category}</p>
+                    <div class='output-category-line'></div>
+                    <p class='output-varietal'>${varietal}</p>
+                  </div>
+                  <div class="output-region-div">
+                    <p class='output-appellation'>📍 ${
+                      appellation ? appellation + ", " : ""
+                    }</p>
+                    <p class='output-country'> &nbsp;${country}</p>
+                  <div>
+              </div>`;
     }
 
     function sendFocus() {
@@ -269,11 +264,32 @@
       flavors.forEach((keyword) => {
         params.append("flavors", keyword.trim());
       });
-      // params.append("minPrice", 20); // TODO: CHANGE 20 TO ACTUAL MIN PRICE FROM USER INPUT
-      // params.append("maxPrice", 50); // TODO: CHANGE 50 TO ACTUAL MAX PRICE FROM USER INPUT
-      // params.append("category", "White"); // TODO: CHANGE White TO ACTUAL CATEGORY FROM USER INPUT
-      // params.append("country", "France"); // TODO: CHANGE France TO ACTUAL COUNTRY FROM USER INPUT
-      // params.append("appellation", "Alsace"); // TODO: CHANGE Alsace TO ACTUAL APPELLATION FROM USER INPUT
+      const minPrice = document.getElementById("minPrice").value;
+      const maxPrice = document.getElementById("maxPrice").value;
+      params.append("minPrice", minPrice || 0);
+      params.append("maxPrice", maxPrice || Number.MAX_SAFE_INTEGER);
+
+      const category = document.querySelector(".add-dropdown.category").value;
+      if (category !== "all") {
+        params.append("category", category);
+      }
+
+      const country = document.querySelector(".add-dropdown.country").value;
+      if (country !== "all") {
+        params.append("country", country);
+      }
+
+      if (document.getElementById("input-box-varietal")) {
+        const varietal = document.getElementById("input-box-varietal").value;
+        params.append("varietal", varietal);
+      }
+
+      if (document.getElementById("input-box-region")) {
+        const appellation = document.getElementById("input-box-region").value;
+        params.append("appellation", appellation);
+      }
+
+      console.log("hi");
 
       let moodButtons = document.querySelectorAll(".mood-button.active");
       for (btn of moodButtons) {
@@ -325,6 +341,122 @@
         });
     }
 
+    function createDropdownList(suggestions, inputElement, cssElement) {
+      const dropdown = document.createElement("ul");
+      dropdown.setAttribute("class", cssElement);
+
+      suggestions.forEach((suggestion) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = suggestion;
+        listItem.addEventListener("click", () => {
+          document.getElementById(inputElement).value = listItem.textContent;
+          closeDropdown();
+        });
+        dropdown.appendChild(listItem);
+      });
+
+      return dropdown;
+    }
+
+    function closeDropdown() {
+      const dropdown = document.querySelector(".suggestions-dropdown");
+      const dropdown_varietal = document.querySelector(
+        ".suggestions-dropdown-varietal"
+      );
+      const dropdown_region = document.querySelector(
+        ".suggestions-dropdown-region"
+      );
+      if (dropdown) {
+        dropdown.remove();
+      }
+      if (dropdown_varietal) {
+        dropdown_varietal.remove();
+      }
+      if (dropdown_region) {
+        dropdown_region.remove();
+      }
+    }
+
+    document
+      .getElementById("filter-text-val")
+      .addEventListener("input", (event) => {
+        const input = event.target.value;
+        if (input) {
+          fetchWineSuggestions(input);
+        } else {
+          closeDropdown();
+        }
+      });
+
+    document.addEventListener("click", (event) => {
+      if (
+        !event.target.closest(".suggestions-dropdown") &&
+        !event.target.closest("#filter-text-val")
+      ) {
+        closeDropdown();
+      }
+    });
+
+    function fetchWineSuggestions(input) {
+      fetch(`/suggest_wines?input=${encodeURIComponent(input)}`)
+        .then((response) => response.json())
+        .then((suggestions) => {
+          closeDropdown();
+          if (suggestions.length > 0) {
+            const dropdown = createDropdownList(
+              suggestions,
+              "filter-text-val",
+              "suggestions-dropdown"
+            );
+            document
+              .getElementById("filter-text-val")
+              .parentNode.appendChild(dropdown);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+    function fetchVarietalSuggestions(input) {
+      fetch(`/suggest_varietals?input=${input}`)
+        .then((response) => response.json())
+        .then((suggestions) => {
+          closeDropdown();
+          if (suggestions.length > 0) {
+            const dropdown = createDropdownList(
+              suggestions,
+              "input-box-varietal",
+              "suggestions-dropdown-varietal"
+            );
+            const inputBox = document.getElementById("input-box-varietal");
+            if (inputBox) {
+              inputBox.parentNode.appendChild(dropdown);
+            }
+          }
+        });
+    }
+
+    function fetchRegionSuggestions(country, input) {
+      fetch(`/suggest_regions?country=${country}&input=${input}`)
+        .then((response) => response.json())
+        .then((suggestions) => {
+          closeDropdown();
+          if (suggestions.length > 0) {
+            console.log(suggestions);
+            const dropdown = createDropdownList(
+              suggestions,
+              "input-box-region",
+              "suggestions-dropdown-region"
+            );
+            const inputBox = document.getElementById("input-box-region");
+            if (inputBox) {
+              inputBox.parentNode.appendChild(dropdown);
+            }
+          }
+        });
+    }
+
     function filterText() {
       document.getElementById("answer-box").innerHTML = "";
       document.getElementById("result-text").innerHTML = "Loading...";
@@ -355,6 +487,50 @@
       }
     }
 
+    function setUpVarietalInputEventListener() {
+      const varietalInput = document.getElementById("input-box-varietal");
+
+      varietalInput.addEventListener("input", (event) => {
+        const input = event.target.value;
+        if (input) {
+          fetchVarietalSuggestions(input);
+        } else {
+          closeDropdown();
+        }
+      });
+    }
+
+    function setUpRegionInputEventListener() {
+      const regionInput = document.getElementById("input-box-region");
+      const countryDropdown = document.querySelector(".add-dropdown.country");
+      regionInput.addEventListener("input", (event) => {
+        const input = event.target.value;
+        const country = countryDropdown.value;
+        if (input) {
+          fetchRegionSuggestions(country, input);
+        } else {
+          closeDropdown();
+        }
+      });
+    }
+
+    function createVarietalInput() {
+      const varietalBox = document.querySelector(".add-box.varietal");
+      const inputBox = document.createElement("div");
+      inputBox.classList.add("add-input-box", "varietal");
+      inputBox.innerHTML =
+        '<input id="input-box-varietal" placeholder="All" />';
+      varietalBox.appendChild(inputBox);
+    }
+
+    function createRegionInput() {
+      const regionBox = document.querySelector(".add-box.region");
+      const inputBox = document.createElement("div");
+      inputBox.classList.add("add-input-box", "region");
+      inputBox.innerHTML = '<input id="input-box-region" placeholder="All" />';
+      regionBox.appendChild(inputBox);
+    }
+
     // Event listener to toggle mood filters on and off
     // https://dev.to/nicm42/how-to-make-a-button-looked-like-it-s-staying-pressed-down-58k#:~:text=You%20can%20use%20a%20normal,button')%3B%20button.
     // https://www.codeinwp.com/snippets/add-event-listener-to-multiple-elements-with-javascript/#:~:text=%7D)(i)%3B%20%7D-,Adding%20an%20Event%20Listener%20to%20Multiple%20Elements%20Using%20a%20for,loop%20back%20into%20the%20function.
@@ -365,9 +541,23 @@
       });
     }
 
-    document.querySelector('#filter-button').addEventListener('click', () => {
-      document.querySelector('#search-box').classList.toggle('search-box-edit');
-      document.querySelector("#additional-filters").classList.toggle('additional-filters');
-    }); 
+    document.querySelector("#filter-button").addEventListener("click", () => {
+      document.querySelector("#search-box").classList.toggle("search-box-edit");
+      document
+        .querySelector("#additional-filters")
+        .classList.toggle("additional-filters");
+
+      // Create the input element if it doesn't exist
+      if (!document.getElementById("input-box-varietal")) {
+        createVarietalInput();
+      }
+
+      if (!document.getElementById("input-box-region")) {
+        createRegionInput();
+      }
+
+      setUpVarietalInputEventListener();
+      setUpRegionInputEventListener();
+    });
   </script>
 </body>
