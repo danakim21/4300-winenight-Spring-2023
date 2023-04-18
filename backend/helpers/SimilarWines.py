@@ -169,6 +169,7 @@ class SimilarWines:
     
     def getQuery(self, wine_name):
         # Construct query to get review for given wine name
+        wine_name = wine_name.replace("'", "''")
         query_sql = f"""SELECT review FROM {MYSQL_DATABASE}.wine_data WHERE wine = '{wine_name}'"""        
         cursor = mysql_engine.query_selector(query_sql)
 
