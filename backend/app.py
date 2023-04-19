@@ -158,4 +158,4 @@ def fetch_region_suggestions(country, input):
     region_names = [result[0].split()[0].rstrip(",") for result in data]
     return region_names
 
-app.run(debug=True)
+# app.run(debug=True)
