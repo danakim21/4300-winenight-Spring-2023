@@ -20,7 +20,7 @@ def sql_search(wine_name, limit=10):
     data = mysql_engine.query_selector(query_sql)
     return json.dumps([dict(zip(keys, i)) for i in data])
 
-def sql_search_reviews():
+def sql_search_reviews(similarity_scores=None):
     # Get user input 
     flavors = request.args.getlist("flavors")
     min_price = request.args.get("minPrice")
@@ -38,6 +38,12 @@ def sql_search_reviews():
         SELECT * FROM {MYSQL_DATABASE}.wine_data 
         WHERE 1=1
         """
+    
+    if similarity_scores:
+        wine_names_from_similarity_scores = [score['wine_name'].lower().replace("%", "%%") for score in similarity_scores]
+        wine_names_list = ', '.join([f'"{wine_name}"' for wine_name in wine_names_from_similarity_scores])
+        query_sql += f" AND LOWER(wine) IN ({wine_names_list})"
+    
     
     if min_price is not None:
         query_sql += f" AND price_numeric >= {min_price}"
@@ -62,21 +68,28 @@ def sql_search_reviews():
         query_sql += f" AND (LOWER(wine) IN ({wine_list}) OR LENGTH(TRIM(wine)) = 0)"
 
     keys = ["wine", "country", "winery", "category", "designation", "varietal", "appellation", "alcohol", "price", "rating", "reviewer", "review", "price_numeric", "price_range", "alcohol_numeric"]
-    data = mysql_engine.query_selector(query_sql)
+    query_result = mysql_engine.query_selector(query_sql)
+    results = [dict(zip(keys, row)) for row in query_result] 
 
-    # Correct typos using minimum edit distance 
-    flavor_typo_corrector = FlavorTypoCorrector(3)
-    flavors = flavor_typo_corrector.get_replaced_flavor_list(flavors)
-
-    # Get results using boolean search 
-    results = boolean_search(data, keys, flavors)
+    if similarity_scores is not None:
+        similarity_scores_dict = {score['wine_name'].lower(): score for score in similarity_scores}
+        
+        for result in results:
+            wine_name = result['wine'].lower()
+            if wine_name in similarity_scores_dict:
+                result.update(similarity_scores_dict[wine_name])
+    else:
+        results = boolean_search(results, flavors, similarity_scores=None, flavorSearch=True)
 
     # Filter results by mood
     if mood:
-        results = mood_filter(results, mood)
-    
-    results = results[:10]
-
+        if similarity_scores is None:
+            results = mood_filter(results, mood, flavorSearch=True)
+        elif similarity_scores is not None and flavors[0] == '':
+            results = mood_filter(results, mood, similar=True)
+        else:
+            results = mood_filter(results, mood, both=True)
+    results = results[:6]
     return json.dumps(results)
 
 @app.route("/")
@@ -90,32 +103,39 @@ def wine_search():
 
 @app.route("/wine_reviews")
 def wine_reviews_search():
-    return sql_search_reviews()
+    # Get user input 
+    wine_name = request.args.get("wine_name")
+    flavors = request.args.getlist("flavors")
+    # ... (Keep the other user input parameters)
+
+    flavor_typo_corrector = FlavorTypoCorrector(3)
+    flavors = flavor_typo_corrector.get_replaced_flavor_list(flavors)
+
+    similarity_scores = None
+
+    # Check if wine_name is provided
+    if wine_name != "null":
+        sw = SimilarWines(wine_name)
+        similarity_scores = sw.get_similarity_scores(limit=3000)
+
+        # If flavors are also provided, filter the similarity_scores by flavors
+        if len(flavors) > 0 and flavors[0] != '':
+            wine_data = [item for item in similarity_scores]
+            keys = ["score", "wine_name", "price", "category", "varietal", "appellation", "country", "review"]
+            filtered_wine_data = boolean_search(wine_data, flavors, similarity_scores)
+            similarity_scores = [{'wine_name': item['wine_name'], 'combined_score': item['combined_score'], 'score': item['score'], 'term_score': item['term_score']} for item in filtered_wine_data] 
+
+    
+    results = sql_search_reviews(similarity_scores)
+    return results
 
 @app.route("/similar_wines")
 def similar_wine_search():
     wine_name = request.args.get("wine_name")
+    limit = request.args.get("limit", default=10000, type=int)
     sw = SimilarWines(wine_name)
-    results = []
-    for score, msg_id in sw.search_results[1:11]:
-        wine_name = sw.get_wine_name_from_id(msg_id)
-        wine_metadata = sw.get_wine_metadata(wine_name)
-        price = wine_metadata["price"]
-        category = wine_metadata["category"]
-        varietal = wine_metadata["varietal"]
-        appellation = wine_metadata["appellation"]
-        country = wine_metadata["country"]
-        results.append({
-        "score": score,
-        "wine_name": wine_name,
-        "price": price,
-        "category": category,
-        "varietal": varietal,
-        "appellation": appellation,
-        "country": country
-        })
-
-    return json.dumps(results)
+    scores_and_details = sw.get_similarity_scores()
+    return json.dumps(scores_and_details)
 
 @app.route("/suggest_wines")
 def suggest_wines():
@@ -149,7 +169,6 @@ def suggest_regions():
     return json.dumps(suggestions)
 
 def fetch_region_suggestions(country, input):
-    print(country)
     if country == "all":
         query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(appellation) LIKE '%%{input}%%' LIMIT 10"""
     else:
@@ -158,4 +177,7 @@ def fetch_region_suggestions(country, input):
     region_names = [result[0].split()[0].rstrip(",") for result in data]
     return region_names
 
-# app.run(debug=True)
+
+SimilarWines.initialize_cache()
+app.run(debug=True)
+

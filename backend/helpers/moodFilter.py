@@ -1,4 +1,4 @@
-def mood_filter(results, mood):
+def mood_filter(results, mood, flavorSearch=None, similar=None, both=None):
     """
     Filters wine recommendation results based on mood according to:
     https://bettertastingwine.com/wine_moods.html
@@ -57,5 +57,14 @@ def mood_filter(results, mood):
                 # but the mood varietal is 'Champange')
                 filtered_results.append(wine_dict)
                 break
-    results.sort(key=lambda x: x['total_score'], reverse=True)
+
+    if flavorSearch:
+        filtered_results.sort(key=lambda x: x['term_score'], reverse=True)
+    
+    if similar:
+        filtered_results.sort(key=lambda x: x.get('score', 0), reverse=True)
+
+    if both:
+        filtered_results.sort(key=lambda x: x.get('combined_score', 0), reverse=True)
+
     return filtered_results

@@ -227,8 +227,27 @@
       category,
       varietal,
       appellation,
-      country
+      country,
+      sim_score,
+      term_score,
+      combined_score
     ) {
+      let sim_score_div = "";
+
+      if (combined_score !== undefined) {
+        sim_score_div = `<div class="sim-score">Similarity Score: ${
+          sim_score.toFixed(2) * 100
+        }% | Term Score: ${term_score} | Combined Score: ${
+          combined_score.toFixed(2) * 100
+        }</div>`;
+      } else if (term_score) {
+        sim_score_div = `<div class="sim-score">Term Score: ${term_score}</div>`;
+      } else {
+        sim_score_div = `<div class="sim-score">Similarity Score: ${
+          sim_score.toFixed(2) * 100
+        }%</div>`;
+      }
+
       return `<div class='output-content-div'>
                   <p class='output-title'>${name}</p>
                   <p class='output-price'>${price}</p>
@@ -244,6 +263,7 @@
                     }</p>
                     <p class='output-country'> &nbsp;${country}</p>
                   <div>
+                    ${sim_score_div}
               </div>`;
     }
 
@@ -255,8 +275,11 @@
       document.getElementById("filter-text-val").focus();
     }
 
-    function performFlavorSearch(wine_names = null) {
-      console.log("Wine Names", wine_names);
+    function performFlavorSearch(
+      queried_wine = null,
+      wine_names = null,
+      sim_scores = null
+    ) {
       const params = new URLSearchParams();
       const flavors = document
         .getElementById("filter-text-val-preferred")
@@ -268,6 +291,7 @@
       const maxPrice = document.getElementById("maxPrice").value;
       params.append("minPrice", minPrice || 0);
       params.append("maxPrice", maxPrice || Number.MAX_SAFE_INTEGER);
+      params.append("wine_name", queried_wine);
 
       const category = document.querySelector(".add-dropdown.category").value;
       if (category !== "all") {
@@ -289,8 +313,6 @@
         params.append("appellation", appellation);
       }
 
-      console.log("hi");
-
       let moodButtons = document.querySelectorAll(".mood-button.active");
       for (btn of moodButtons) {
         params.append("mood", btn.innerText || btn.textContent);
@@ -303,7 +325,6 @@
           .join(",");
         params.append("wine", wine_names.join(","));
       }
-
       fetch("/wine_reviews?" + params.toString())
         .then((response) => response.json())
         .then((data) => {
@@ -311,19 +332,28 @@
             document.getElementById("result-text").innerHTML =
               "No results found. Please try typing different preferred flavors.";
           } else {
-            if (wine_names) {
-              // Sort the data based on the order of wine_names
-              const sortedData = [];
-              wine_names.forEach((name) => {
-                const foundWine = data.find((wine) => wine.wine === name);
-                if (foundWine) sortedData.push(foundWine);
-              });
-              data = sortedData;
-            }
+            // Sort data based on combined_score
+            data.sort((a, b) => {
+              if (
+                a.combined_score !== undefined &&
+                b.combined_score !== undefined
+              ) {
+                return b.combined_score - a.combined_score;
+              } else if (
+                a.term_score !== undefined &&
+                b.term_score !== undefined
+              ) {
+                return b.term_score - a.term_score;
+              } else {
+                return b.score - a.score;
+              }
+            });
+
             document.getElementById(
               "result-text"
             ).innerHTML = `Our top ${data.length} Recommendation(s) for you!`;
             data.forEach((row) => {
+              console.log(row, "ROW");
               row.appellation = row.appellation.split(",")[0];
               let tempDiv = document.createElement("div");
               tempDiv.classList.add("output-card");
@@ -333,7 +363,10 @@
                 row.category,
                 row.varietal,
                 row.appellation,
-                row.country
+                row.country,
+                row.score,
+                row.term_score,
+                row.combined_score
               );
               document.getElementById("answer-box").appendChild(tempDiv);
             });
@@ -467,32 +500,8 @@
 
       if (moodButtons.length > 0) {
         if (wine_name.value != "") {
-          fetch(
-            `/similar_wines?wine_name=${encodeURIComponent(wine_name.value)}`
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.length === 0) {
-                // If no similar wines found, perform the flavor search on all wines
-                if (document.getElementById("filter-text-val").value) {
-                  const similar_input =
-                    document.getElementById("filter-text-val").value;
-                  document.getElementById(
-                    "result-text"
-                  ).innerHTML = `No Wines Similar to ${similar_input} were found.`;
-                } else {
-                  performFlavorSearch();
-                }
-              } else {
-                // If similar wines found, perform the flavor search on those wines
-                console.log(data);
-                const wine_names = data.map((row) => row.wine_name);
-                performFlavorSearch(wine_names);
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+          // Perform the flavor search using both wine_name and flavors
+          performFlavorSearch(document.getElementById("filter-text-val").value);
         } else {
           // If no wine name inputted, perform the flavor search on all wines
           performFlavorSearch();

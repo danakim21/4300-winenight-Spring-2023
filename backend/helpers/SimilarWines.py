@@ -1,5 +1,5 @@
 # Cosine Similarity Logic from A4
-
+import time
 import re
 import logging
 import sys
@@ -15,16 +15,83 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from db import mysql_engine, MYSQL_DATABASE
 
 class SimilarWines:
+    _reviews_cache = None
+    _tokenized_reviews_cache = None
+    _inverted_index_cache = None
+    _idf_cache = None
+    _doc_norms_cache = None
+
     def __init__(self, wine_name):
-        self.reviews_non_tokenized = self.get_all_reviews()
-        self.reviews = self.get_all_reviews_tokenized()
-        self.inverted_index = self.build_inverted_index(self.reviews)
-        self.idf = self.compute_idf(self.inverted_index, len(self.reviews))
-        self.doc_norms = self.compute_doc_norms(self.inverted_index, self.idf, len(self.reviews))
+        if SimilarWines._reviews_cache is None:
+            SimilarWines._reviews_cache = self.get_all_reviews()
+        self.reviews_non_tokenized = SimilarWines._reviews_cache
+
+        if SimilarWines._tokenized_reviews_cache is None:
+            SimilarWines._tokenized_reviews_cache = self.get_all_reviews_tokenized()
+        self.reviews = SimilarWines._tokenized_reviews_cache
+
+        if SimilarWines._inverted_index_cache is None:
+            SimilarWines._inverted_index_cache = self.build_inverted_index(self.reviews)
+        self.inverted_index = SimilarWines._inverted_index_cache
+
+        if SimilarWines._idf_cache is None:
+            SimilarWines._idf_cache = self.compute_idf(self.inverted_index, len(self.reviews))
+        self.idf = SimilarWines._idf_cache
+
+        if SimilarWines._doc_norms_cache is None:
+            SimilarWines._doc_norms_cache = self.compute_doc_norms(self.inverted_index, self.idf, len(self.reviews))
+        self.doc_norms = SimilarWines._doc_norms_cache
+        
         self.query = self.getQuery(wine_name)
         self.search_results = self.index_search(self.query, self.inverted_index, self.idf, self.doc_norms)
         mysql_engine.load_file_into_db("../init.sql")
 
+
+    @classmethod
+    def initialize_cache(cls):
+        if cls._reviews_cache is None:
+            cls._reviews_cache = cls.get_all_reviews()
+
+        if cls._tokenized_reviews_cache is None:
+            cls._tokenized_reviews_cache = cls.get_all_reviews_tokenized()
+
+    def get_similarity_scores(self, limit=None):
+        if limit is None:
+            limit = len(self.search_results)
+        else:
+            limit = min(limit, len(self.search_results))
+
+        wine_ids = [msg_id for _, msg_id in self.search_results[1:limit]]
+        wine_metadata_list = self.get_wines_metadata(wine_ids)
+
+        scored_wines = []
+        start_time = time.time()
+
+        for score, wine_metadata in zip(self.search_results[1:limit], wine_metadata_list):
+            wine_name = wine_metadata["wine_name"]
+            price = wine_metadata["price"]
+            category = wine_metadata["category"]
+            varietal = wine_metadata["varietal"]
+            appellation = wine_metadata["appellation"]
+            country = wine_metadata["country"]
+            review = wine_metadata["review"]
+
+            scored_wines.append({
+                "score": score[0],
+                "wine_name": wine_name,
+                "price": price,
+                "category": category,
+                "varietal": varietal,
+                "appellation": appellation,
+                "country": country,
+                "review": review
+            })
+
+        end_time = time.time()
+        print("Time taken for get_similarity_scores: {:.4f} seconds".format(end_time - start_time))
+        return scored_wines
+
+    
     @staticmethod
     def tokenize(text):
         """Returns a list of words that make up the text.
@@ -40,49 +107,67 @@ class SimilarWines:
         
         return result
     
-    def get_all_reviews(self):
+    @classmethod
+    def get_all_reviews(cls):
+        start_time = time.time()
         query_sql = f"""SELECT wine, review FROM {MYSQL_DATABASE}.wine_data"""
         data = mysql_engine.query_selector(query_sql)
         reviews = {d[0]: d[1] for d in data}
+        end_time = time.time()
+        print("Time taken for get_all_reviews: {:.4f} seconds".format(end_time - start_time))
         return reviews
     
-    def get_wine_metadata(self, wine_name):
-        wine_name = wine_name.replace("'", "''")
-        query_sql = f"""SELECT price, category, varietal, appellation, country FROM {MYSQL_DATABASE}.wine_data WHERE wine = '{wine_name}'"""
+    def get_wines_metadata(self, wine_ids):
+        start_time = time.time()
+        wine_names = [self.get_wine_name_from_id(msg_id) for msg_id in wine_ids]
+        wine_names_str = "', '".join([wine_name.replace("'", "''").replace("%", "%%") for wine_name in wine_names])
+        query_sql = f"""SELECT wine, price, category, varietal, appellation, country, review FROM {MYSQL_DATABASE}.wine_data WHERE wine IN ('{wine_names_str}')"""
         cursor = mysql_engine.query_selector(query_sql)
+        wine_metadata_dict = {}
 
-        # Iterate over cursor to get review text
-        data = cursor.fetchone()
-        if data is not None:
-            price, category, varietal, appellation, country = data
-            return {
+        for wine_name, price, category, varietal, appellation, country, review in cursor:
+            wine_metadata_dict[wine_name] = {
+                "wine_name": wine_name,
                 "price": price,
                 "category": category,
                 "varietal": varietal,
                 "appellation": appellation,
-                "country": country
+                "country": country,
+                "review": review
             }
-        else:
-            return None
+
+        # Sort the wine metadata list based on the order of the input wine names
+        wine_metadata_list = [wine_metadata_dict[wine_name] for wine_name in wine_names]
+
+        end_time = time.time()
+        print("Time taken for get_wines_metadata: {:.4f} seconds".format(end_time - start_time))
+        return wine_metadata_list
         
-    def get_all_reviews_tokenized(self):
-        reviews = list(self.reviews_non_tokenized.values())
-        tokenized_reviews = [self.tokenize(review) for review in reviews]
+    @classmethod
+    def get_all_reviews_tokenized(cls):
+        reviews = list(cls._reviews_cache.values())
+        tokenized_reviews = [cls.tokenize(review) for review in reviews]
         return tokenized_reviews
+
     
     def get_wine_name_from_id(self, msg_id):
         return list(self.reviews_non_tokenized.keys())[msg_id]
     
     def build_inverted_index(self, tokenized_reviews):
+        start_time = time.time()
+
         inverted_index = {}
-        
+
         for i, review in enumerate(tokenized_reviews):
-            for term in set(review):
-                inverted_index.setdefault(term, []).append((i, review.count(term)))
-                
-        for term in inverted_index:
-            inverted_index[term].sort()
-            
+            # Use Counter to count term occurrences in the review
+            term_counts = Counter(review)
+            for term, count in term_counts.items():
+                inverted_index.setdefault(term, []).append((i, count))
+
+        # No need to sort inverted_index[term] as it's already sorted
+
+        end_time = time.time()
+        print("Time taken for build_inverted_index: {:.4f} seconds".format(end_time - start_time))
         return inverted_index
     
     def compute_idf(self, inv_idx, n_docs, min_df=200, max_df_ratio=0.2):
@@ -136,6 +221,7 @@ class SimilarWines:
         return doc_scores
     
     def index_search(self, query, index, idf, doc_norms, score_func=accumulate_dot_scores, tokenizer=tt()):
+        start_time = time.time()
         if query is None:
             return []
         
@@ -164,6 +250,10 @@ class SimilarWines:
         # Return sorted results
         results = sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)
         results = [(score, doc_id) for doc_id, score in results]
+
+        end_time = time.time()
+        print("Time taken for index_search: {:.4f} seconds".format(end_time - start_time))
+
             
         return results
     
