@@ -693,3 +693,56 @@ strong {
 .suggestions-dropdown-region li:hover {
   background-color: #f1f1f1;
 }
+
+.tag-wine {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-right: 8px;
+  font-size: 16px;
+  line-height: 3;
+  color: #000000;
+  background-color: #f1f1f1;
+}
+
+.tag-varietal {
+  display: inline-block;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 2;
+  color: #000000;
+  background-color: #f1f1f1;
+  padding: 6px;
+  margin: 10;
+}
+
+.tag-region {
+  display: inline-block;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 2;
+  color: #000000;
+  background-color: #f1f1f1;
+}
+
+.close-btn {
+  font-size: 16px;
+  line-height: 1;
+  margin-left: 8px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #999;
+}
+
+.close-btn-add {
+  font-size: 12px;
+  line-height: 1;
+  margin-left: 0px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #999;
+}

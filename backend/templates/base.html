@@ -3,14 +3,9 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+  rel="stylesheet" />
 
 <body>
   <div class="full-body-container">
@@ -79,11 +74,8 @@
         </div>
         <div class="similar-input-container" onclick="sendFocusSimilarWines()">
           <div class="similar-input-box">
-            <input
-              class="similar-input-box"
-              placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio"
-              id="filter-text-val"
-            />
+            <input class="similar-input-box" placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio"
+              id="filter-text-val" />
           </div>
         </div>
         <div>
@@ -98,8 +90,7 @@
         <div class="preferred-input-box" onclick="sendFocusPreferred()">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
-            id="filter-text-val-preferred"
-          />
+            id="filter-text-val-preferred" />
         </div>
         <div>
           <p class="inst">Use comma to separate multiple keywords</p>
@@ -137,11 +128,7 @@
               <div class="title-box country">
                 <p class="add-title">Country of Origin</p>
               </div>
-              <select
-                class="add-dropdown country"
-                id="country-select"
-                onchange="changeCountry()"
-              >
+              <select class="add-dropdown country" id="country-select" onchange="changeCountry()">
                 <option value="all">All</option>
                 <option value="argentina">Argentina</option>
                 <option value="armenia">Armenia</option>
@@ -239,17 +226,14 @@
       let sim_score_div = '';
 
       if (combined_score !== undefined) {
-        sim_score_div = `<div class="sim-score">Similarity Score: ${
-          sim_score.toFixed(2) * 100
-        }% | Term Score: ${term_score} | Combined Score: ${
-          combined_score.toFixed(2) * 100
-        }</div>`;
+        sim_score_div = `<div class="sim-score">Similarity Score: ${sim_score.toFixed(2) * 100
+          }% | Term Score: ${term_score} | Combined Score: ${combined_score.toFixed(2) * 100
+          }</div>`;
       } else if (term_score) {
         sim_score_div = `<div class="sim-score">Term Score: ${term_score}</div>`;
       } else {
-        sim_score_div = `<div class="sim-score">Similarity Score: ${
-          sim_score.toFixed(2) * 100
-        }%</div>`;
+        sim_score_div = `<div class="sim-score">Similarity Score: ${sim_score.toFixed(2) * 100
+          }%</div>`;
       }
 
       return `<div class='output-content-div'>
@@ -262,9 +246,8 @@
                     <p class='output-varietal'>${varietal}</p>
                   </div>
                   <div class="output-region-div">
-                    <p class='output-appellation'>📍 ${
-                      appellation ? appellation + ', ' : ''
-                    }</p>
+                    <p class='output-appellation'>📍 ${appellation ? appellation + ', ' : ''
+        }</p>
                     <p class='output-country'> &nbsp;${country}</p>
                   <div>
                     ${sim_score_div}
@@ -334,7 +317,7 @@
         .then((data) => {
           if (data.length === 0) {
             document.getElementById('result-text').innerHTML =
-              'No results found. Please try typing different preferred flavors.';
+              'No results found. Please try typing different search(es).';
           } else {
             // Sort data based on combined_score
             data.sort((a, b) => {
@@ -378,19 +361,158 @@
         });
     }
 
-    function createDropdownList(suggestions, inputElement, cssElement) {
+    function createWineDropdownList(suggestions, inputElement, cssElement) {
       const dropdown = document.createElement('ul');
       dropdown.setAttribute('class', cssElement);
+
+      let tagAdded = false;
 
       suggestions.forEach((suggestion) => {
         const listItem = document.createElement('li');
         listItem.textContent = suggestion;
         listItem.addEventListener('click', () => {
-          document.getElementById(inputElement).value = listItem.textContent;
-          closeDropdown();
+          if (!tagAdded) {
+            const input = document.getElementById(inputElement);
+            const tag = document.createElement('span');
+            tag.textContent = suggestion;
+            tag.classList.add('tag-wine');
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.classList.add('close-btn');
+            closeBtn.addEventListener('click', (event) => {
+              event.stopPropagation();
+              tag.parentNode.removeChild(tag);
+              input.value = '';
+              input.setAttribute('placeholder', 'ex. Oak Grove 2012 Reserve Pinot Grigio');
+              input.style.display = 'block';
+              tagAdded = false;
+            });
+            tag.appendChild(closeBtn);
+            input.insertAdjacentElement('beforebegin', tag);
+            input.style.display = 'none';
+            tagAdded = true;
+            closeDropdown();
+          }
         });
         dropdown.appendChild(listItem);
       });
+
+      // Listen for input changes and remove the tag if the user modifies the input
+      document.getElementById(inputElement).addEventListener('input', () => {
+        if (tagAdded) {
+          const input = document.getElementById(inputElement);
+          const tag = input.previousElementSibling;
+          tag.parentNode.removeChild(tag);
+          input.setAttribute('placeholder', 'ex. Oak Grove 2012 Reserve Pinot Grigio');
+          input.style.display = 'block';
+          tagAdded = false;
+        }
+      });
+
+
+      return dropdown;
+    }
+
+    function createVarietalDropdownList(suggestions, inputElement, cssElement) {
+      const dropdown = document.createElement('ul');
+      dropdown.setAttribute('class', cssElement);
+
+      let tagAdded = false;
+
+      suggestions.forEach((suggestion) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = suggestion;
+        listItem.addEventListener('click', () => {
+          if (!tagAdded) {
+            const input = document.getElementById(inputElement);
+            const tag = document.createElement('span');
+            tag.textContent = suggestion;
+            tag.classList.add('tag-varietal');
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.classList.add('close-btn-add');
+            closeBtn.addEventListener('click', (event) => {
+              event.stopPropagation();
+              tag.parentNode.removeChild(tag);
+              input.value = '';
+              input.setAttribute('placeholder', 'All');
+              input.style.display = 'block';
+              tagAdded = false;
+            });
+            tag.appendChild(closeBtn);
+            input.insertAdjacentElement('beforebegin', tag);
+            input.style.display = 'none';
+            tagAdded = true;
+            closeDropdown();
+          }
+        });
+        dropdown.appendChild(listItem);
+      });
+
+      // Listen for input changes and remove the tag if the user modifies the input
+      document.getElementById(inputElement).addEventListener('input', () => {
+        if (tagAdded) {
+          const input = document.getElementById(inputElement);
+          const tag = input.previousElementSibling;
+          tag.parentNode.removeChild(tag);
+          input.setAttribute('placeholder', 'All');
+          input.style.display = 'block';
+          tagAdded = false;
+        }
+      });
+
+
+      return dropdown;
+    }
+
+    function createRegionDropdownList(suggestions, inputElement, cssElement) {
+      const dropdown = document.createElement('ul');
+      dropdown.setAttribute('class', cssElement);
+
+      let tagAdded = false;
+
+      suggestions.forEach((suggestion) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = suggestion;
+        listItem.addEventListener('click', () => {
+          if (!tagAdded) {
+            const input = document.getElementById(inputElement);
+            const tag = document.createElement('span');
+            tag.textContent = suggestion;
+            tag.classList.add('tag-region');
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.classList.add('close-btn-add');
+            closeBtn.addEventListener('click', (event) => {
+              event.stopPropagation();
+              tag.parentNode.removeChild(tag);
+              input.value = '';
+              input.setAttribute('placeholder', 'All');
+              input.style.display = 'block';
+              tagAdded = false;
+            });
+            tag.appendChild(closeBtn);
+            input.insertAdjacentElement('beforebegin', tag);
+            input.style.display = 'none';
+            tagAdded = true;
+            closeDropdown();
+          }
+        });
+        dropdown.appendChild(listItem);
+      });
+
+      // Listen for input changes and remove the tag if the user modifies the input
+      document.getElementById(inputElement).addEventListener('input', () => {
+        if (tagAdded) {
+          const input = document.getElementById(inputElement);
+          const tag = input.previousElementSibling;
+          tag.parentNode.removeChild(tag);
+          input.setAttribute('placeholder', 'All');
+          input.style.display = 'block';
+          tagAdded = false;
+        }
+      });
+
 
       return dropdown;
     }
@@ -440,7 +562,7 @@
         .then((suggestions) => {
           closeDropdown();
           if (suggestions.length > 0) {
-            const dropdown = createDropdownList(
+            const dropdown = createWineDropdownList(
               suggestions,
               'filter-text-val',
               'suggestions-dropdown'
@@ -478,7 +600,7 @@
         .then((suggestions) => {
           closeDropdown();
           if (suggestions.length > 0) {
-            const dropdown = createDropdownList(
+            const dropdown = createVarietalDropdownList(
               suggestions,
               'input-box-varietal',
               'suggestions-dropdown-varietal'
@@ -515,7 +637,7 @@
           closeDropdown();
           if (suggestions.length > 0) {
             console.log(suggestions);
-            const dropdown = createDropdownList(
+            const dropdown = createRegionDropdownList(
               suggestions,
               'input-box-region',
               'suggestions-dropdown-region'
