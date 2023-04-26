@@ -40,7 +40,15 @@ def suggest_wines(request):
 
 def suggest_varietals(request):
     input = request.args.get('input')
-    suggestions = fetch_varietal_suggestions(input)
+    # Mood
+    chill=request.args.get("chill")
+    sad=request.args.get("sad")
+    sexy=request.args.get("sexy")
+    angry=request.args.get("angry")
+    wild=request.args.get("wild")
+    low=request.args.get("low")
+
+    suggestions = fetch_varietal_suggestions(input, chill=="true", sad=="true", sexy=="true", angry=="true", wild=="true", low=="true")
     return json.dumps(suggestions)
 
 def suggest_regions(request):

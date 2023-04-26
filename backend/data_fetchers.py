@@ -80,17 +80,56 @@ def fetch_wine_suggestions(input):
     wine_names = [row[0] for row in data]
     return wine_names
 
-def fetch_varietal_suggestions(varietal_name):
-    query_sql = f"""SELECT DISTINCT varietal FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(varietal) LIKE '%%{varietal_name}%%' LIMIT 6"""
+mood_varietal_pair = {
+    "chill": ['Sauvignon Blanc', 'Riesling', 'Chardonnay', 'Pinot Gris', 'Pinot Grigio', 'Beaujolais', 'Pinot Noir', 'Tempranillo'], 
+    "sad": ['Pinot Noir', 'Rioja', 'Valpolicella'], 
+    "sexy": ['Cote du Rhone', 'Chateauneuf-du-Pape', 'Pinot Noir', 'Chambolle-Musigny', 'Barbaresco'], 
+    "angry": ['Sauvignon Blanc', 'Albarino', 'Verdelho', 'Champagne', 'Moscato', 'Chassagne', 'Puligny-Montrachet', 'Meursault'], 
+    "wild": ['Syrah', 'Zinfandel', 'Greco di Tufo', 'Nero d\'Avola', 'Aglianico'], 
+    "low": ['Sauvignon Blanc', 'Zinfandel', 'Valpolicella', 'Pinot Noir', 'Vosne-Romanée', 'New Zealand Pinot'], 
+}
+
+def fetch_varietal_suggestions(varietal_name, chill, sad, sexy, angry, wild, low):
+    query_sql = f"""SELECT DISTINCT varietal FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(varietal) LIKE '%%{varietal_name}%%' LIMIT 30"""
     data = mysql_engine.query_selector(query_sql)
     varietal_names = [result[0] for result in data]
-    return varietal_names
+
+    if not chill and not sad and not sexy and not angry and not wild and not low: 
+        return varietal_names[:6]
+
+    selected_varietal_from_mood = []
+    if chill: 
+        selected_varietal_from_mood += mood_varietal_pair['chill']
+    if sad: 
+        selected_varietal_from_mood += mood_varietal_pair['sad']
+    if sexy: 
+        selected_varietal_from_mood += mood_varietal_pair['sexy']
+    if angry: 
+        selected_varietal_from_mood += mood_varietal_pair['angry']
+    if wild: 
+        selected_varietal_from_mood += mood_varietal_pair['wild']
+    if low: 
+        selected_varietal_from_mood += mood_varietal_pair['low']
+
+    filtered_varietal_names = []
+    for varietal_name in varietal_names: 
+        for selected_varietal_name in selected_varietal_from_mood: 
+            if selected_varietal_name in varietal_name: 
+                filtered_varietal_names.append(varietal_name)
+
+    return filtered_varietal_names[:6]
 
 def fetch_region_suggestions(country, input):
-    if country == "all":
-        query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(appellation) LIKE '%%{input}%%' LIMIT 10"""
-    else:
-        query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(appellation) LIKE '%%{input}%%' AND LOWER(country)='{country}' LIMIT 10"""
+    if input: 
+        if country == "all":
+            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(appellation) LIKE '%%{input}%%' LIMIT 10"""
+        else:
+            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(appellation) LIKE '%%{input}%%' AND LOWER(country)='{country}' LIMIT 10"""
+    else: 
+        if country == "all":
+            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data LIMIT 10"""
+        else:
+            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(country)='{country}' LIMIT 10"""
     data = mysql_engine.query_selector(query_sql)
     region_names = [result[0].split()[0].rstrip(",") for result in data]
     return region_names
