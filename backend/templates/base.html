@@ -218,10 +218,20 @@
 
     <p id="result-text"></p>
     <!-- <button id="sort-button" onclick="sortPrice(this)" data-sort="asc">Sort Price (Low to High)</button> -->
-    <div id="answer-box"></div>
+    <div id="answer-box">
+    </div>
   </div>
 
   <script>
+
+    // like and dislike button in array
+
+    let likedWines = new Set();
+    let dislikedWines = new Set();
+
+    //let likedWines = [];
+    //let dislikedWines = [];
+
     let sortButton = document.getElementById('sort-button');
     let sortDirection = 'none';
 
@@ -236,6 +246,8 @@
       term_score,
       combined_score
     ) {
+
+  
       let sim_score_div = '';
 
       if (combined_score !== undefined) {
@@ -256,21 +268,30 @@
                   <p class='output-title'>${name}</p>
                   <p class='output-price'>${price}</p>
                   <div class="output-line"></div>
+
                   <div class="output-category-div">
                     <p class='output-category'>🍷 ${category}</p>
                     <div class='output-category-line'></div>
                     <p class='output-varietal'>${varietal}</p>
                   </div>
+
                   <div class="output-region-div">
                     <p class='output-appellation'>📍 ${
                       appellation ? appellation + ', ' : ''
                     }</p>
                     <p class='output-country'> &nbsp;${country}</p>
-                  <div>
-                    ${sim_score_div}
-              </div>`;
+                  </div>
+
+                  <div class="output-line"></div>
+                  <div class="likedislikeButton"> 
+                  <button class="likeButton">👍🏻</button>  
+                  <button class="dislikeButton">👎🏻</button>  </ 
+              </div>  
+              ${sim_score_div}
+              `;
     }
 
+   
     function sendFocus() {
       document.getElementById('filter-text-val-preferred').focus();
     }
@@ -373,10 +394,32 @@
                 row.combined_score
               );
               document.getElementById('answer-box').appendChild(tempDiv);
-            });
+              
+              // like & dislike button event listeners
+              // add event listeners for like and dislike buttons
+              tempDiv.querySelector('.likeButton').addEventListener('click', function() {
+              console.log(`Like button clicked for ${row.wine}`);
+              // likedWines.push(row.wine);
+              likedWines.add(row.wine);
+              console.log(`Liked wines: ${[...likedWines]}`);
+              });
+
+              tempDiv.querySelector('.dislikeButton').addEventListener('click', function() {
+              console.log(`Dislike button clicked for ${row.wine}`);
+              // dislikedWines.push(row.wine);
+              dislikedWines.add(row.wine);
+              console.log(`Disliked wines: ${[...dislikedWines]}`);
+              });
+
+              // append the tempDiv to answer-box
+              document.getElementById('answer-box').appendChild(tempDiv);
+
+                        });
+
           }
         });
     }
+
 
     function createDropdownList(suggestions, inputElement, cssElement) {
       const dropdown = document.createElement('ul');
