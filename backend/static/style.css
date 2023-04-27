@@ -693,3 +693,36 @@ strong {
 .suggestions-dropdown-region li:hover {
   background-color: #f1f1f1;
 }
+
+.likedislikeButton{
+  gap: 16px;
+}
+
+.likeButton {
+  font-size: 12pt;
+  display: inline-block;
+  
+  width: 50px;
+  height: 50px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.1),
+    0px 0px 4px -1px rgba(0, 0, 0, 0.06);
+   border-radius: 6px;
+
+}
+
+.dislikeButton {
+  font-size: 12pt;
+  display: inline-block;
+  
+  width: 50px;
+  height: 50px;
+  
+  background-color: #ffffff;
+
+  box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.1),
+  0px 0px 4px -1px rgba(0, 0, 0, 0.06);
+
+  border-radius: 6px;
+
+}
