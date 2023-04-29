@@ -22,7 +22,7 @@ def wine_reviews_search(request):
     # Check if wine_name is provided
     if wine_name != "null":
         sw = SimilarWines(wine_name)
-        similarity_scores = sw.get_similarity_scores(limit=3000)
+        similarity_scores = sw.get_similarity_scores(limit=500)
 
         # If flavors are also provided, filter the similarity_scores by flavors
         if len(flavors) > 0 and flavors[0] != '':
