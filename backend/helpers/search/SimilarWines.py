@@ -17,6 +17,7 @@ from db import mysql_engine, MYSQL_DATABASE
 class SimilarWines:
     _reviews_cache = None
     _tokenized_reviews_cache = None
+    _idx_to_wine_name = None
     _inverted_index_cache = None
     _idf_cache = None
     _doc_norms_cache = None
@@ -27,7 +28,7 @@ class SimilarWines:
         self.reviews_non_tokenized = SimilarWines._reviews_cache
 
         if SimilarWines._tokenized_reviews_cache is None:
-            SimilarWines._tokenized_reviews_cache = self.get_all_reviews_tokenized()
+            SimilarWines._tokenized_reviews_cache, SimilarWines._idx_to_wine_name = self.get_all_reviews_tokenized()
         self.reviews = SimilarWines._tokenized_reviews_cache
 
         if SimilarWines._inverted_index_cache is None:
@@ -145,9 +146,15 @@ class SimilarWines:
         
     @classmethod
     def get_all_reviews_tokenized(cls):
-        reviews = list(cls._reviews_cache.values())
+        # reviews = list(cls._reviews_cache.values())
+        # idx_to_wine_name = dict(enumerate(cls._reviews_cache.keys()))
+        reviews = []
+        idx_to_wine_name = {}
+        for idx, (wine_name, review) in enumerate(cls._reviews_cache.items()):
+            reviews.append(review)
+            idx_to_wine_name[idx] = wine_name
         tokenized_reviews = [cls.tokenize(review) for review in reviews]
-        return tokenized_reviews
+        return tokenized_reviews, idx_to_wine_name
 
     
     def get_wine_name_from_id(self, msg_id):
