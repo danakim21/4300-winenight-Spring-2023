@@ -222,8 +222,16 @@
   </div>
 
   <script>
-    let sortButton = document.getElementById('sort-button');
-    let sortDirection = 'none';
+    // like and dislike button in array
+
+    let likedWines = new Set();
+    let dislikedWines = new Set();
+
+    //let likedWines = [];
+    //let dislikedWines = [];
+
+    let sortButton = document.getElementById("sort-button");
+    let sortDirection = "none";
 
     function answerBoxTemplate(
       name,
@@ -234,9 +242,10 @@
       country,
       sim_score,
       term_score,
-      combined_score
+      combined_score,
+      mood
     ) {
-      let sim_score_div = '';
+      let sim_score_div = "";
 
       if (combined_score !== undefined) {
         sim_score_div = `<div class="sim-score">Similarity Score: ${
@@ -256,27 +265,36 @@
                   <p class='output-title'>${name}</p>
                   <p class='output-price'>${price}</p>
                   <div class="output-line"></div>
+
                   <div class="output-category-div">
                     <p class='output-category'>🍷 ${category}</p>
                     <div class='output-category-line'></div>
                     <p class='output-varietal'>${varietal}</p>
                   </div>
+
                   <div class="output-region-div">
                     <p class='output-appellation'>📍 ${
-                      appellation ? appellation + ', ' : ''
+                      appellation ? appellation + ", " : ""
                     }</p>
                     <p class='output-country'> &nbsp;${country}</p>
-                  <div>
-                    ${sim_score_div}
-              </div>`;
+                  </div>
+
+                  <div class="output-line"></div>
+                  <div class="likedislikeButton"> 
+                  <button class="likeButton">👍🏻</button>  
+                  <button class="dislikeButton">👎🏻</button>  </ 
+              </div>  
+              ${sim_score_div}
+              <div>Matches the mood ${mood}</div>
+              `;
     }
 
     function sendFocus() {
-      document.getElementById('filter-text-val-preferred').focus();
+      document.getElementById("filter-text-val-preferred").focus();
     }
 
     function sendFocusSimilarWines() {
-      document.getElementById('filter-text-val').focus();
+      document.getElementById("filter-text-val").focus();
     }
 
     function performFlavorSearch(
@@ -286,55 +304,55 @@
     ) {
       const params = new URLSearchParams();
       const flavors = document
-        .getElementById('filter-text-val-preferred')
-        .value.split(',');
+        .getElementById("filter-text-val-preferred")
+        .value.split(",");
       flavors.forEach((keyword) => {
-        params.append('flavors', keyword.trim());
+        params.append("flavors", keyword.trim());
       });
-      const minPrice = document.getElementById('minPrice').value;
-      const maxPrice = document.getElementById('maxPrice').value;
-      params.append('minPrice', minPrice || 0);
-      params.append('maxPrice', maxPrice || Number.MAX_SAFE_INTEGER);
-      params.append('wine_name', queried_wine);
+      const minPrice = document.getElementById("minPrice").value;
+      const maxPrice = document.getElementById("maxPrice").value;
+      params.append("minPrice", minPrice || 0);
+      params.append("maxPrice", maxPrice || Number.MAX_SAFE_INTEGER);
+      params.append("wine_name", queried_wine);
 
-      const category = document.querySelector('.add-dropdown.category').value;
-      if (category !== 'all') {
-        params.append('category', category);
+      const category = document.querySelector(".add-dropdown.category").value;
+      if (category !== "all") {
+        params.append("category", category);
       }
 
-      const country = document.querySelector('.add-dropdown.country').value;
-      if (country !== 'all') {
-        params.append('country', country);
+      const country = document.querySelector(".add-dropdown.country").value;
+      if (country !== "all") {
+        params.append("country", country);
       }
 
-      if (document.getElementById('input-box-varietal')) {
-        const varietal = document.getElementById('input-box-varietal').value;
-        params.append('varietal', varietal);
+      if (document.getElementById("input-box-varietal")) {
+        const varietal = document.getElementById("input-box-varietal").value;
+        params.append("varietal", varietal);
       }
 
-      if (document.getElementById('input-box-region')) {
-        const appellation = document.getElementById('input-box-region').value;
-        params.append('appellation', appellation);
+      if (document.getElementById("input-box-region")) {
+        const appellation = document.getElementById("input-box-region").value;
+        params.append("appellation", appellation);
       }
 
-      let moodButtons = document.querySelectorAll('.mood-button.active');
+      let moodButtons = document.querySelectorAll(".mood-button.active");
       for (btn of moodButtons) {
-        params.append('mood', btn.innerText || btn.textContent);
+        params.append("mood", btn.innerText || btn.textContent);
       }
 
       // If wine_names is not null, add it to the query parameters
       if (wine_names) {
         const encodedWines = wine_names
           .map((wine) => encodeURIComponent(wine))
-          .join(',');
-        params.append('wine', wine_names.join(','));
+          .join(",");
+        params.append("wine", wine_names.join(","));
       }
-      fetch('/wine_reviews?' + params.toString())
+      fetch("/wine_reviews?" + params.toString())
         .then((response) => response.json())
         .then((data) => {
           if (data.length === 0) {
-            document.getElementById('result-text').innerHTML =
-              'No results found. Please try typing different preferred flavors.';
+            document.getElementById("result-text").innerHTML =
+              "No results found. Please try typing different preferred flavors.";
           } else {
             // Sort data based on combined_score
             data.sort((a, b) => {
@@ -354,13 +372,13 @@
             });
 
             document.getElementById(
-              'result-text'
+              "result-text"
             ).innerHTML = `Our top ${data.length} Recommendation(s) for you!`;
             data.forEach((row) => {
-              console.log(row, 'ROW');
-              row.appellation = row.appellation.split(',')[0];
-              let tempDiv = document.createElement('div');
-              tempDiv.classList.add('output-card');
+              console.log(row, "ROW");
+              row.appellation = row.appellation.split(",")[0];
+              let tempDiv = document.createElement("div");
+              tempDiv.classList.add("output-card");
               tempDiv.innerHTML = answerBoxTemplate(
                 row.wine,
                 row.price,
@@ -370,22 +388,46 @@
                 row.country,
                 row.score,
                 row.term_score,
-                row.combined_score
+                row.combined_score,
+                row.mood
               );
-              document.getElementById('answer-box').appendChild(tempDiv);
+              document.getElementById("answer-box").appendChild(tempDiv);
+
+              // like & dislike button event listeners
+              // add event listeners for like and dislike buttons
+              tempDiv
+                .querySelector(".likeButton")
+                .addEventListener("click", function () {
+                  console.log(`Like button clicked for ${row.wine}`);
+                  // likedWines.push(row.wine);
+                  likedWines.add(row.wine);
+                  console.log(`Liked wines: ${[...likedWines]}`);
+                });
+
+              tempDiv
+                .querySelector(".dislikeButton")
+                .addEventListener("click", function () {
+                  console.log(`Dislike button clicked for ${row.wine}`);
+                  // dislikedWines.push(row.wine);
+                  dislikedWines.add(row.wine);
+                  console.log(`Disliked wines: ${[...dislikedWines]}`);
+                });
+
+              // append the tempDiv to answer-box
+              document.getElementById("answer-box").appendChild(tempDiv);
             });
           }
         });
     }
 
     function createDropdownList(suggestions, inputElement, cssElement) {
-      const dropdown = document.createElement('ul');
-      dropdown.setAttribute('class', cssElement);
+      const dropdown = document.createElement("ul");
+      dropdown.setAttribute("class", cssElement);
 
       suggestions.forEach((suggestion) => {
-        const listItem = document.createElement('li');
+        const listItem = document.createElement("li");
         listItem.textContent = suggestion;
-        listItem.addEventListener('click', () => {
+        listItem.addEventListener("click", () => {
           document.getElementById(inputElement).value = listItem.textContent;
           closeDropdown();
         });
@@ -396,12 +438,12 @@
     }
 
     function closeDropdown() {
-      const dropdown = document.querySelector('.suggestions-dropdown');
+      const dropdown = document.querySelector(".suggestions-dropdown");
       const dropdown_varietal = document.querySelector(
-        '.suggestions-dropdown-varietal'
+        ".suggestions-dropdown-varietal"
       );
       const dropdown_region = document.querySelector(
-        '.suggestions-dropdown-region'
+        ".suggestions-dropdown-region"
       );
       if (dropdown) {
         dropdown.remove();
@@ -415,8 +457,8 @@
     }
 
     document
-      .getElementById('filter-text-val')
-      .addEventListener('input', (event) => {
+      .getElementById("filter-text-val")
+      .addEventListener("input", (event) => {
         const input = event.target.value;
         if (input) {
           fetchWineSuggestions(input);
@@ -425,10 +467,10 @@
         }
       });
 
-    document.addEventListener('click', (event) => {
+    document.addEventListener("click", (event) => {
       if (
-        !event.target.closest('.suggestions-dropdown') &&
-        !event.target.closest('#filter-text-val')
+        !event.target.closest(".suggestions-dropdown") &&
+        !event.target.closest("#filter-text-val")
       ) {
         closeDropdown();
       }
@@ -442,11 +484,11 @@
           if (suggestions.length > 0) {
             const dropdown = createDropdownList(
               suggestions,
-              'filter-text-val',
-              'suggestions-dropdown'
+              "filter-text-val",
+              "suggestions-dropdown"
             );
             document
-              .getElementById('filter-text-val')
+              .getElementById("filter-text-val")
               .parentNode.appendChild(dropdown);
           }
         })
@@ -457,7 +499,7 @@
 
     function fetchVarietalSuggestions(input) {
       // Fetch selected moods
-      let moodButtons = document.querySelectorAll('.mood-button.active');
+      let moodButtons = document.querySelectorAll(".mood-button.active");
       let selectedMoods = [];
       for (btn of moodButtons) {
         selectedMoods.push(btn.id);
@@ -465,13 +507,13 @@
 
       fetch(
         `/suggest_varietals?input=${input}&chill=${selectedMoods.includes(
-          'chill'
-        )}&sad=${selectedMoods.includes('sad')}&sexy=${selectedMoods.includes(
-          'sexy'
+          "chill"
+        )}&sad=${selectedMoods.includes("sad")}&sexy=${selectedMoods.includes(
+          "sexy"
         )}&angry=${selectedMoods.includes(
-          'angry'
-        )}&wild=${selectedMoods.includes('wild')}&low=${selectedMoods.includes(
-          'low'
+          "angry"
+        )}&wild=${selectedMoods.includes("wild")}&low=${selectedMoods.includes(
+          "low"
         )}`
       )
         .then((response) => response.json())
@@ -480,10 +522,10 @@
           if (suggestions.length > 0) {
             const dropdown = createDropdownList(
               suggestions,
-              'input-box-varietal',
-              'suggestions-dropdown-varietal'
+              "input-box-varietal",
+              "suggestions-dropdown-varietal"
             );
-            const inputBox = document.getElementById('input-box-varietal');
+            const inputBox = document.getElementById("input-box-varietal");
             if (inputBox) {
               inputBox.parentNode.appendChild(dropdown);
             }
@@ -492,19 +534,19 @@
     }
 
     function changeCountry() {
-      selectedCountry = document.getElementById('country-select').value;
-      document.getElementById('input-box-region').value = '';
+      selectedCountry = document.getElementById("country-select").value;
+      document.getElementById("input-box-region").value = "";
       fetch(`/suggest_regions?country=${selectedCountry}`)
         .then((response) => response.json())
         .then((suggestions) => {
           if (suggestions.length > 0) {
-            document.getElementById('input-box-region').disabled = false;
+            document.getElementById("input-box-region").disabled = false;
           } else {
-            document.getElementById('input-box-region').disabled = true;
+            document.getElementById("input-box-region").disabled = true;
           }
         })
         .catch((err) => {
-          document.getElementById('input-box-region').disabled = true;
+          document.getElementById("input-box-region").disabled = true;
         });
     }
 
@@ -517,10 +559,10 @@
             console.log(suggestions);
             const dropdown = createDropdownList(
               suggestions,
-              'input-box-region',
-              'suggestions-dropdown-region'
+              "input-box-region",
+              "suggestions-dropdown-region"
             );
-            const inputBox = document.getElementById('input-box-region');
+            const inputBox = document.getElementById("input-box-region");
             if (inputBox) {
               inputBox.parentNode.appendChild(dropdown);
             }
@@ -529,31 +571,31 @@
     }
 
     function filterText() {
-      document.getElementById('answer-box').innerHTML = '';
-      document.getElementById('result-text').innerHTML = 'Loading...';
-      let recommendButton = document.querySelector('.recommend-button');
+      document.getElementById("answer-box").innerHTML = "";
+      document.getElementById("result-text").innerHTML = "Loading...";
+      let recommendButton = document.querySelector(".recommend-button");
 
-      const wine_name = document.getElementById('filter-text-val');
-      let moodButtons = document.querySelectorAll('.mood-button.active');
+      const wine_name = document.getElementById("filter-text-val");
+      let moodButtons = document.querySelectorAll(".mood-button.active");
 
       if (moodButtons.length > 0) {
-        if (wine_name.value != '') {
+        if (wine_name.value != "") {
           // Perform the flavor search using both wine_name and flavors
-          performFlavorSearch(document.getElementById('filter-text-val').value);
+          performFlavorSearch(document.getElementById("filter-text-val").value);
         } else {
           // If no wine name inputted, perform the flavor search on all wines
           performFlavorSearch();
         }
       } else {
-        document.getElementById('result-text').innerHTML =
+        document.getElementById("result-text").innerHTML =
           'Please select at least one mood before pressing "Recommend".';
       }
     }
 
     function setUpVarietalInputEventListener() {
-      const varietalInput = document.getElementById('input-box-varietal');
+      const varietalInput = document.getElementById("input-box-varietal");
 
-      varietalInput.addEventListener('input', (event) => {
+      varietalInput.addEventListener("input", (event) => {
         const input = event.target.value;
         if (input) {
           fetchVarietalSuggestions(input);
@@ -564,9 +606,9 @@
     }
 
     function setUpRegionInputEventListener() {
-      const regionInput = document.getElementById('input-box-region');
-      const countryDropdown = document.querySelector('.add-dropdown.country');
-      regionInput.addEventListener('input', (event) => {
+      const regionInput = document.getElementById("input-box-region");
+      const countryDropdown = document.querySelector(".add-dropdown.country");
+      regionInput.addEventListener("input", (event) => {
         const input = event.target.value;
         const country = countryDropdown.value;
         if (input) {
@@ -578,18 +620,18 @@
     }
 
     function createVarietalInput() {
-      const varietalBox = document.querySelector('.add-box.varietal');
-      const inputBox = document.createElement('div');
-      inputBox.classList.add('add-input-box', 'varietal');
+      const varietalBox = document.querySelector(".add-box.varietal");
+      const inputBox = document.createElement("div");
+      inputBox.classList.add("add-input-box", "varietal");
       inputBox.innerHTML =
         '<input id="input-box-varietal" placeholder="All" />';
       varietalBox.appendChild(inputBox);
     }
 
     function createRegionInput() {
-      const regionBox = document.querySelector('.add-box.region');
-      const inputBox = document.createElement('div');
-      inputBox.classList.add('add-input-box', 'region');
+      const regionBox = document.querySelector(".add-box.region");
+      const inputBox = document.createElement("div");
+      inputBox.classList.add("add-input-box", "region");
       inputBox.innerHTML = '<input id="input-box-region" placeholder="All" />';
       regionBox.appendChild(inputBox);
     }
@@ -597,25 +639,25 @@
     // Event listener to toggle mood filters on and off
     // https://dev.to/nicm42/how-to-make-a-button-looked-like-it-s-staying-pressed-down-58k#:~:text=You%20can%20use%20a%20normal,button')%3B%20button.
     // https://www.codeinwp.com/snippets/add-event-listener-to-multiple-elements-with-javascript/#:~:text=%7D)(i)%3B%20%7D-,Adding%20an%20Event%20Listener%20to%20Multiple%20Elements%20Using%20a%20for,loop%20back%20into%20the%20function.
-    let moodButtons = document.querySelectorAll('.mood-button');
+    let moodButtons = document.querySelectorAll(".mood-button");
     for (btn of moodButtons) {
-      btn.addEventListener('click', function () {
-        this.classList.toggle('active');
+      btn.addEventListener("click", function () {
+        this.classList.toggle("active");
       });
     }
 
-    document.querySelector('#filter-button').addEventListener('click', () => {
-      document.querySelector('#search-box').classList.toggle('search-box-edit');
+    document.querySelector("#filter-button").addEventListener("click", () => {
+      document.querySelector("#search-box").classList.toggle("search-box-edit");
       document
-        .querySelector('#additional-filters')
-        .classList.toggle('additional-filters');
+        .querySelector("#additional-filters")
+        .classList.toggle("additional-filters");
 
       // Create the input element if it doesn't exist
-      if (!document.getElementById('input-box-varietal')) {
+      if (!document.getElementById("input-box-varietal")) {
         createVarietalInput();
       }
 
-      if (!document.getElementById('input-box-region')) {
+      if (!document.getElementById("input-box-region")) {
         createRegionInput();
       }
 
