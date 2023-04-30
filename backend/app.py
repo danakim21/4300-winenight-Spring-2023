@@ -44,4 +44,4 @@ def create_wine_index():
 SimilarWines.initialize_cache()
 create_wine_index()
 
-app.run(debug=True)
+# app.run(debug=True)
