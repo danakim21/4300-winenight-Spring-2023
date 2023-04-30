@@ -75,10 +75,10 @@ def sql_search_reviews(request, similarity_scores=None):
     return json.dumps(results)
 
 def fetch_wine_suggestions(input):
-    query = f"SELECT wine FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(wine) LIKE '%%{input}%%' LIMIT 6"
+    query = f"SELECT wine FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(wine) LIKE '%%{input}%%' LIMIT 30"
     data = mysql_engine.query_selector(query)
     wine_names = [row[0] for row in data]
-    return wine_names
+    return [*set(wine_names)][:6]
 
 mood_varietal_pair = {
     "chill": ['Sauvignon Blanc', 'Riesling', 'Chardonnay', 'Pinot Gris', 'Pinot Grigio', 'Beaujolais', 'Pinot Noir', 'Tempranillo'], 
@@ -117,19 +117,19 @@ def fetch_varietal_suggestions(varietal_name, chill, sad, sexy, angry, wild, low
             if selected_varietal_name in varietal_name: 
                 filtered_varietal_names.append(varietal_name)
 
-    return filtered_varietal_names[:6]
+    return [*set(filtered_varietal_names)][:6]
 
 def fetch_region_suggestions(country, input):
     if input: 
         if country == "all":
-            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(appellation) LIKE '%%{input}%%' LIMIT 10"""
+            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(appellation) LIKE '%%{input}%%' LIMIT 30"""
         else:
-            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(appellation) LIKE '%%{input}%%' AND LOWER(country)='{country}' LIMIT 10"""
+            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(appellation) LIKE '%%{input}%%' AND LOWER(country)='{country}' LIMIT 30"""
     else: 
         if country == "all":
-            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data LIMIT 10"""
+            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data LIMIT 30"""
         else:
-            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(country)='{country}' LIMIT 10"""
+            query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(country)='{country}' LIMIT 30"""
     data = mysql_engine.query_selector(query_sql)
 
     region_names = []
@@ -137,4 +137,5 @@ def fetch_region_suggestions(country, input):
         result_split = result[0].split()
         if len(result_split) > 0: 
             region_names.append(result_split[0].rstrip(","))
-    return region_names
+
+    return [*set(region_names)][:6]
