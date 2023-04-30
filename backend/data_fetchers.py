@@ -131,5 +131,10 @@ def fetch_region_suggestions(country, input):
         else:
             query_sql = f"""SELECT DISTINCT appellation FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(country)='{country}' LIMIT 10"""
     data = mysql_engine.query_selector(query_sql)
-    region_names = [result[0].split()[0].rstrip(",") for result in data]
+
+    region_names = []
+    for result in data: 
+        result_split = result[0].split()
+        if len(result_split) > 0: 
+            region_names.append(result_split[0].rstrip(","))
     return region_names
