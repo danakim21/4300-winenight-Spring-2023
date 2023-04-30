@@ -3,9 +3,14 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet" />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+  rel="stylesheet"
+/>
 
 <body>
   <div class="full-body-container">
@@ -74,8 +79,11 @@
         </div>
         <div class="similar-input-container" onclick="sendFocusSimilarWines()">
           <div class="similar-input-box">
-            <input class="similar-input-box" placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio"
-              id="filter-text-val" />
+            <input
+              class="similar-input-box"
+              placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio"
+              id="filter-text-val"
+            />
           </div>
         </div>
         <div>
@@ -90,7 +98,8 @@
         <div class="preferred-input-box">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
-            id="filter-text-val-preferred" />
+            id="filter-text-val-preferred"
+          />
         </div>
         <div>
           <p class="inst">Use comma to separate multiple keywords</p>
@@ -128,7 +137,11 @@
               <div class="title-box country">
                 <p class="add-title">Country of Origin</p>
               </div>
-              <select class="add-dropdown country" id="country-select" onchange="changeCountry()">
+              <select
+                class="add-dropdown country"
+                id="country-select"
+                onchange="changeCountry()"
+              >
                 <option value="all">All</option>
                 <option value="argentina">Argentina</option>
                 <option value="armenia">Armenia</option>
@@ -248,15 +261,23 @@
       //   }%</div>`;
       // }
 
-      if (combined_score !== undefined) {
+      let flavor = document.getElementById('filter-text-val-preferred').value;
 
-        sim_score_div = `<div class="sim-score"><p>This wine is recommended based on</p><ul><li>Your input of similar wine (similarity score: ${sim_score.toFixed(2) * 100}%)</li><li>Your preferred flavor(s) appear(s) ${term_score} time(s) in this wine's review</li><li>The combined score for above is ${combined_score.toFixed(2) * 100}</li><li>Matches your choice of mood(s) of ${mood}</li></ul></div>`;
-      } else if (term_score) {
+      if (combined_score !== undefined) {
+        sim_score_div = `<div class="sim-score"><p>This wine is recommended based on</p><ul><li>Your input of similar wine (similarity score: ${
+          sim_score.toFixed(2) * 100
+        }%)</li><li>Your preferred flavor(s) appear(s) ${term_score} time(s) in this wine's review</li><li>The combined score for above is ${
+          combined_score.toFixed(2) * 100
+        }</li><li>Matches your choice of mood(s) of ${mood}</li></ul></div>`;
+      } else if (term_score && flavor !== '') {
         sim_score_div = `<div class="sim-score"><p>This wine is recommended based on</p><ul><li>Your preferred flavor(s) appear(s) ${term_score} time(s) in this wine's review</li><li>Matches your choice of mood(s):${mood}</li></ul></div>`;
       } else if (sim_score) {
-        sim_score_div = `<div class="sim-score"><p>This wine is recommended based on</p><ul><li>Your input of similar wine (similarity score: ${sim_score.toFixed(2) * 100}%)</li><li>Your choice of mood(s):${mood}</li></ul></div>`;
+        sim_score_div = `<div class="sim-score"><p>This wine is recommended based on</p><ul><li>Your input of similar wine (similarity score: ${
+          sim_score.toFixed(2) * 100
+        }%)</li><li>Your choice of mood(s):${mood}</li></ul></div>`;
+      } else {
+        sim_score_div = `<div class="sim-score"><p>This wine is recommended based on</p><ul><li>Matches your choice of mood(s):${mood}</li></ul></div>`;
       }
-
 
       return `<div class='output-content-div'>
                   <p class='output-title'>${name}</p>
@@ -390,7 +411,7 @@
                 row.combined_score,
                 row.mood
               );
-              document.getElementById("answer-box").appendChild(tempDiv);
+              document.getElementById('answer-box').appendChild(tempDiv);
 
               document.getElementById('answer-box').appendChild(tempDiv);
 
@@ -405,6 +426,24 @@
                   console.log(`Liked wines: ${[...likedWines]}`);
                 });
 
+              tempDiv
+                .querySelector('.dislikeButton')
+                .addEventListener('click', function () {
+                  console.log(`Dislike button clicked for ${row.wine}`);
+                  // dislikedWines.push(row.wine);
+                  dislikedWines.add(row.wine);
+                  console.log(`Disliked wines: ${[...dislikedWines]}`);
+                });
+
+              // add event listeners for like and dislike buttons
+              tempDiv
+                .querySelector('.likeButton')
+                .addEventListener('click', function () {
+                  console.log(`Like button clicked for ${row.wine}`);
+                  // likedWines.push(row.wine);
+                  likedWines.add(row.wine);
+                  console.log(`Liked wines: ${[...likedWines]}`);
+                });
 
               tempDiv
                 .querySelector('.dislikeButton')
@@ -415,34 +454,18 @@
                   console.log(`Disliked wines: ${[...dislikedWines]}`);
                 });
 
-                // add event listeners for like and dislike buttons
-tempDiv.querySelector('.likeButton').addEventListener('click', function () {
-  console.log(`Like button clicked for ${row.wine}`);
-  // likedWines.push(row.wine);
-  likedWines.add(row.wine);
-  console.log(`Liked wines: ${[...likedWines]}`);
-});
+              // Get the button elements within the tempDiv
+              const likeButton = tempDiv.querySelector('.likeButton');
+              const dislikeButton = tempDiv.querySelector('.dislikeButton');
 
-tempDiv.querySelector('.dislikeButton').addEventListener('click', function () {
-  console.log(`Dislike button clicked for ${row.wine}`);
-  // dislikedWines.push(row.wine);
-  dislikedWines.add(row.wine);
-  console.log(`Disliked wines: ${[...dislikedWines]}`);
-});
+              // Add click event listeners to the buttons within the tempDiv
+              likeButton.addEventListener('click', function () {
+                likeButton.classList.add('active');
+              });
 
-// Get the button elements within the tempDiv
-const likeButton = tempDiv.querySelector('.likeButton');
-const dislikeButton = tempDiv.querySelector('.dislikeButton');
-
-// Add click event listeners to the buttons within the tempDiv
-likeButton.addEventListener('click', function () {
-  likeButton.classList.add('active');
-});
-
-dislikeButton.addEventListener('click', function () {
-  dislikeButton.classList.add('active');
-});
-
+              dislikeButton.addEventListener('click', function () {
+                dislikeButton.classList.add('active');
+              });
 
               // append the tempDiv to answer-box
               document.getElementById('answer-box').appendChild(tempDiv);
