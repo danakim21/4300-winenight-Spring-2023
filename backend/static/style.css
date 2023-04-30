@@ -404,6 +404,24 @@ button {
   background: #c53030;
 }
 
+.likeButton:hover {
+  background: #c63a3a2d;
+  transition: 0.3s;
+}
+
+
+.dislikeButton:hover {
+  background: #c63a3a2d;
+  transition: 0.3s;
+}
+
+.likeButton.active,
+.dislikeButton.active {
+  background: #c53030;
+}
+
+
+
 .recommend-button {
   border-radius: 6px;
   display: flex;
@@ -694,6 +712,11 @@ strong {
   background-color: #f1f1f1;
 }
 
+.just-text{
+  display: inline-block;
+  margin-right: 12px;
+}
+
 .tag-wine {
   display: inline-block;
   border-radius: 4px;
@@ -748,6 +771,7 @@ strong {
 }
 
 .likedislikeButton{
+  width: 100%;
   gap: 16px;
 }
 
@@ -761,6 +785,8 @@ strong {
   box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.1),
     0px 0px 4px -1px rgba(0, 0, 0, 0.06);
    border-radius: 6px;
+
+   margin-left: 12px;
 
 }
 
