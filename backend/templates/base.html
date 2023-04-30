@@ -373,6 +373,7 @@
         listItem.addEventListener('click', () => {
           if (!tagAdded) {
             const input = document.getElementById(inputElement);
+            document.getElementById(inputElement).value = listItem.textContent;
             const tag = document.createElement('span');
             tag.textContent = suggestion;
             tag.classList.add('tag-wine');
@@ -425,6 +426,7 @@
         listItem.addEventListener('click', () => {
           if (!tagAdded) {
             const input = document.getElementById(inputElement);
+            document.getElementById(inputElement).value = listItem.textContent;
             const tag = document.createElement('span');
             tag.textContent = suggestion;
             tag.classList.add('tag-varietal');
@@ -477,6 +479,7 @@
         listItem.addEventListener('click', () => {
           if (!tagAdded) {
             const input = document.getElementById(inputElement);
+            document.getElementById(inputElement).value = listItem.textContent;
             const tag = document.createElement('span');
             tag.textContent = suggestion;
             tag.classList.add('tag-region');
