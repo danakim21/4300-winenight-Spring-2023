@@ -593,7 +593,7 @@ button {
 .output-country {
   display: flex;
   flex-direction: row;
-  align-items: end;
+  align-items: flex-start;
   padding: 0px;
   gap: 6px;
 
