@@ -13,15 +13,17 @@ def wine_reviews_search(request):
     # Get user input 
     wine_name = request.args.get("wine_name")
     flavors = request.args.getlist("flavors")
+    liked_wines = request.args.getlist("likedWines")
+    disliked_wines =  request.args.getlist("dislikedWines")
 
     flavor_typo_corrector = FlavorTypoCorrector(3)
     flavors = flavor_typo_corrector.get_replaced_flavor_list(flavors)
 
     similarity_scores = None
 
-    # Check if wine_name is provided
-    if wine_name != "null":
-        sw = SimilarWines(wine_name)
+    # Check if wine_name, liked wines, or disliked wines are provided
+    if wine_name != "null" and not liked_wines and not disliked_wines:
+        sw = SimilarWines(wine_name, liked_wines=liked_wines, disliked_wines=disliked_wines)
         similarity_scores = sw.get_similarity_scores(limit=500)
 
         # If flavors are also provided, filter the similarity_scores by flavors

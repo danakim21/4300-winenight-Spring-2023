@@ -3,14 +3,9 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+  rel="stylesheet" />
 
 <body>
   <div class="full-body-container">
@@ -79,11 +74,8 @@
         </div>
         <div class="similar-input-container" onclick="sendFocusSimilarWines()">
           <div class="similar-input-box">
-            <input
-              class="similar-input-box"
-              placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio"
-              id="filter-text-val"
-            />
+            <input class="similar-input-box" placeholder="ex. Oak Grove 2012 Reserve Pinot Grigio"
+              id="filter-text-val" />
           </div>
         </div>
         <div>
@@ -98,8 +90,7 @@
         <div class="preferred-input-box" onclick="sendFocusPreferred()">
           <input
             placeholder="ex. Sweet, Dry, Purple, Deep, Easy, Dense, Medium Finish, Sturdy, Bold, Airy, Vinegar, Flat, Hot"
-            id="filter-text-val-preferred"
-          />
+            id="filter-text-val-preferred" />
         </div>
         <div>
           <p class="inst">Use comma to separate multiple keywords</p>
@@ -137,11 +128,7 @@
               <div class="title-box country">
                 <p class="add-title">Country of Origin</p>
               </div>
-              <select
-                class="add-dropdown country"
-                id="country-select"
-                onchange="changeCountry()"
-              >
+              <select class="add-dropdown country" id="country-select" onchange="changeCountry()">
                 <option value="all">All</option>
                 <option value="argentina">Argentina</option>
                 <option value="armenia">Armenia</option>
@@ -248,17 +235,14 @@
       let sim_score_div = "";
 
       if (combined_score !== undefined) {
-        sim_score_div = `<div class="sim-score">Similarity Score: ${
-          sim_score.toFixed(2) * 100
-        }% | Term Score: ${term_score} | Combined Score: ${
-          combined_score.toFixed(2) * 100
-        }</div>`;
+        sim_score_div = `<div class="sim-score">Similarity Score: ${sim_score.toFixed(2) * 100
+          }% | Term Score: ${term_score} | Combined Score: ${combined_score.toFixed(2) * 100
+          }</div>`;
       } else if (term_score) {
         sim_score_div = `<div class="sim-score">Term Score: ${term_score}</div>`;
       } else {
-        sim_score_div = `<div class="sim-score">Similarity Score: ${
-          sim_score.toFixed(2) * 100
-        }%</div>`;
+        sim_score_div = `<div class="sim-score">Similarity Score: ${sim_score.toFixed(2) * 100
+          }%</div>`;
       }
 
       return `<div class='output-content-div'>
@@ -273,9 +257,8 @@
                   </div>
 
                   <div class="output-region-div">
-                    <p class='output-appellation'>📍 ${
-                      appellation ? appellation + ", " : ""
-                    }</p>
+                    <p class='output-appellation'>📍 ${appellation ? appellation + ", " : ""
+        }</p>
                     <p class='output-country'> &nbsp;${country}</p>
                   </div>
 
@@ -347,6 +330,19 @@
           .join(",");
         params.append("wine", wine_names.join(","));
       }
+
+      if (likedWines.size > 0) {
+        for (const wine of likedWines.values()) {
+          params.append("likedWines", wine);
+        }
+      }
+
+      if (dislikedWines.size > 0) {
+        for (const wine of dislikedWines.values()) {
+          params.append("dislikedWines", wine);
+        }
+      }
+
       fetch("/wine_reviews?" + params.toString())
         .then((response) => response.json())
         .then((data) => {

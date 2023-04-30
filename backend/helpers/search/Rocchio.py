@@ -40,5 +40,6 @@ def rocchio(query, relevant, irrelevant, input_doc_matrix, \
 # TODO:
 ### get list of relevant wine names from likedWines() in base.html
 ### get list of irrelevant wine names from dislikedWines in base.html
+### SQL_SEARCH_REVIEWS
 ### cosine similarity with new rocchio leveraging SimilarWines.py
 ### track if there has been any user input -- then we switch to rocchio permanently
