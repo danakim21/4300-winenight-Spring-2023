@@ -38,7 +38,7 @@ def suggest_region():
     return suggest_regions(request)
 
 def create_wine_index():
-    query_sql = f"""CREATE INDEX wine_index ON {MYSQL_DATABASE}.wine_data(wine);"""
+    query_sql = f"""CREATE INDEX IF NOT EXISTS wine_index ON {MYSQL_DATABASE}.wine_data(wine);"""
     mysql_engine.query_executor(query_sql)
 
 SimilarWines.initialize_cache()
