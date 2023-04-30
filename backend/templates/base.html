@@ -405,22 +405,6 @@
                   console.log(`Liked wines: ${[...likedWines]}`);
                 });
 
-              // Get the button element
-              const likeButton = document.querySelector('.likeButton');
-
-              // Add a click event listener to the like button
-              likeButton.addEventListener('click', function() {
-                likeButton.classList.add('active');
-              });
-
-              const dislikeButton = document.querySelector('.dislikeButton');
-
-              // Add a click event listener to the dislike button
-              dislikeButton.addEventListener('click', function() {
-                dislikeButton.classList.add('active');
-              });
-
-
 
               tempDiv
                 .querySelector('.dislikeButton')
@@ -430,6 +414,35 @@
                   dislikedWines.add(row.wine);
                   console.log(`Disliked wines: ${[...dislikedWines]}`);
                 });
+
+                // add event listeners for like and dislike buttons
+tempDiv.querySelector('.likeButton').addEventListener('click', function () {
+  console.log(`Like button clicked for ${row.wine}`);
+  // likedWines.push(row.wine);
+  likedWines.add(row.wine);
+  console.log(`Liked wines: ${[...likedWines]}`);
+});
+
+tempDiv.querySelector('.dislikeButton').addEventListener('click', function () {
+  console.log(`Dislike button clicked for ${row.wine}`);
+  // dislikedWines.push(row.wine);
+  dislikedWines.add(row.wine);
+  console.log(`Disliked wines: ${[...dislikedWines]}`);
+});
+
+// Get the button elements within the tempDiv
+const likeButton = tempDiv.querySelector('.likeButton');
+const dislikeButton = tempDiv.querySelector('.dislikeButton');
+
+// Add click event listeners to the buttons within the tempDiv
+likeButton.addEventListener('click', function () {
+  likeButton.classList.add('active');
+});
+
+dislikeButton.addEventListener('click', function () {
+  dislikeButton.classList.add('active');
+});
+
 
               // append the tempDiv to answer-box
               document.getElementById('answer-box').appendChild(tempDiv);
