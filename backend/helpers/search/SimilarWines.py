@@ -17,35 +17,45 @@ from db import mysql_engine, MYSQL_DATABASE
 class SimilarWines:
     _reviews_cache = None
     _tokenized_reviews_cache = None
+    _idx_to_wine_name = None
     _inverted_index_cache = None
     _idf_cache = None
     _doc_norms_cache = None
 
-    def __init__(self, wine_name):
+    def __init__(self, wine_name, liked_wines=[], disliked_wines=[]):
+        start_time = time.time()
+        self.wine_name = wine_name
+
         if SimilarWines._reviews_cache is None:
             SimilarWines._reviews_cache = self.get_all_reviews()
-        self.reviews_non_tokenized = SimilarWines._reviews_cache
 
-        if SimilarWines._tokenized_reviews_cache is None:
-            SimilarWines._tokenized_reviews_cache = self.get_all_reviews_tokenized()
-        self.reviews = SimilarWines._tokenized_reviews_cache
+        if SimilarWines._tokenized_reviews_cache is None:    
+            SimilarWines._tokenized_reviews_cache, SimilarWines._idx_to_wine_name = self.get_all_reviews_tokenized()
 
         if SimilarWines._inverted_index_cache is None:
-            SimilarWines._inverted_index_cache = self.build_inverted_index(self.reviews)
-        self.inverted_index = SimilarWines._inverted_index_cache
+            SimilarWines._inverted_index_cache = self.build_inverted_index(SimilarWines._tokenized_reviews_cache)
 
         if SimilarWines._idf_cache is None:
-            SimilarWines._idf_cache = self.compute_idf(self.inverted_index, len(self.reviews))
-        self.idf = SimilarWines._idf_cache
+            SimilarWines._idf_cache = self.compute_idf(SimilarWines._inverted_index_cache, len(SimilarWines._tokenized_reviews_cache))
 
         if SimilarWines._doc_norms_cache is None:
-            SimilarWines._doc_norms_cache = self.compute_doc_norms(self.inverted_index, self.idf, len(self.reviews))
+            SimilarWines._doc_norms_cache = self.compute_doc_norms(SimilarWines._inverted_index_cache, SimilarWines._idf_cache, len(SimilarWines._tokenized_reviews_cache))
+
+        self.reviews_non_tokenized = SimilarWines._reviews_cache
+        self.reviews = SimilarWines._tokenized_reviews_cache
+        self.inverted_index = SimilarWines._inverted_index_cache
+        self.idf = SimilarWines._idf_cache
         self.doc_norms = SimilarWines._doc_norms_cache
+
+        self.wine_name_to_wine_idx = {v: k for k, v in SimilarWines._idx_to_wine_name.items()}
+        self.liked_wines = liked_wines
+        self.disliked_wines = disliked_wines
         
         self.query = self.getQuery(wine_name)
         self.search_results = self.index_search(self.query, self.inverted_index, self.idf, self.doc_norms)
         mysql_engine.load_file_into_db("../init.sql")
-
+        end_time = time.time()
+        print("Time taken for INIT: {:.4f} seconds".format(end_time - start_time))
 
     @classmethod
     def initialize_cache(cls):
@@ -53,9 +63,10 @@ class SimilarWines:
             cls._reviews_cache = cls.get_all_reviews()
 
         if cls._tokenized_reviews_cache is None:
-            cls._tokenized_reviews_cache = cls.get_all_reviews_tokenized()
+            cls._tokenized_reviews_cache, cls._idx_to_wine_name = cls.get_all_reviews_tokenized()
 
     def get_similarity_scores(self, limit=None):
+        start_time = time.time()
         if limit is None:
             limit = len(self.search_results)
         else:
@@ -65,7 +76,6 @@ class SimilarWines:
         wine_metadata_list = self.get_wines_metadata(wine_ids)
 
         scored_wines = []
-        start_time = time.time()
 
         for score, wine_metadata in zip(self.search_results[1:limit], wine_metadata_list):
             wine_name = wine_metadata["wine_name"]
@@ -145,9 +155,19 @@ class SimilarWines:
         
     @classmethod
     def get_all_reviews_tokenized(cls):
-        reviews = list(cls._reviews_cache.values())
+        start_time = time.time()
+
+        # reviews = list(cls._reviews_cache.values())
+        # idx_to_wine_name = dict(enumerate(cls._reviews_cache.keys()))
+        reviews = []
+        idx_to_wine_name = {}
+        for idx, (wine_name, review) in enumerate(cls._reviews_cache.items()):
+            reviews.append(review)
+            idx_to_wine_name[idx] = wine_name
         tokenized_reviews = [cls.tokenize(review) for review in reviews]
-        return tokenized_reviews
+        end_time = time.time()
+        print("Time taken for reviews_tokenized: {:.4f} seconds".format(end_time - start_time))
+        return tokenized_reviews, idx_to_wine_name
 
     
     def get_wine_name_from_id(self, msg_id):
@@ -157,7 +177,6 @@ class SimilarWines:
         start_time = time.time()
 
         inverted_index = {}
-
         for i, review in enumerate(tokenized_reviews):
             # Use Counter to count term occurrences in the review
             term_counts = Counter(review)
@@ -225,13 +244,25 @@ class SimilarWines:
         if query is None:
             return []
         
-        # Tokenize query
-        query_words = tokenizer.tokenize(query.lower())
-        
-        query_word_counts = {}
-        for word in query_words:
-            query_word_counts[word] = query_word_counts.get(word, 0) + 1
-        
+        # If either the liked wines list or the disliked wines list is non-empty, use rocchio
+        if self.liked_wines or self.disliked_wines:
+            if self.wine_name == "null":
+                query_vec = np.zeros_like(self.wine_term_matrix[0,:])
+            else:
+                query_vec = self.wine_term_matrix[self.wine_name_to_wine_idx[self.wine_name],:]
+            rocchio = self.get_rocchio_vector(self, query_vec, self.liked_wines, self.disliked_wines, \
+                                              input_doc_matrix=self.wine_term_matrix, wine_name_to_index=self.wine_name_to_wine_idx)
+            rocchio = rocchio.tolist()
+            query_word_counts = {}
+            for term_idx, word_count in enumerate(rocchio):
+                query_word_counts[self.term_idx_to_term[term_idx]] = word_count
+        else:
+            # Tokenize query
+            query_words = tokenizer.tokenize(query.lower())
+            query_word_counts = {}
+            for word in query_words:
+                query_word_counts[word] = query_word_counts.get(word, 0) + 1
+
         # Compute dot products
         doc_scores = score_func(self, query_word_counts, index, idf)
         
@@ -253,20 +284,55 @@ class SimilarWines:
 
         end_time = time.time()
         print("Time taken for index_search: {:.4f} seconds".format(end_time - start_time))
-
             
         return results
     
     def getQuery(self, wine_name):
         # Construct query to get review for given wine name
+        start_time = time.time()
+
         wine_name = wine_name.replace("'", "''")
         query_sql = f"""SELECT review FROM {MYSQL_DATABASE}.wine_data WHERE wine = '{wine_name}'"""        
         cursor = mysql_engine.query_selector(query_sql)
 
         # Iterate over cursor to get review text
+        end_time = time.time()
+        print("Time taken for QUERY: {:.4f} seconds".format(end_time - start_time))
         data = cursor.fetchone()
         if data is not None:
             review = data[0]
             return review
         else:
             return None
+        
+        
+        
+    def get_rocchio_vector(self, query, relevant, irrelevant, input_doc_matrix, \
+            wine_name_to_index, a=.3, b=.3, c=.8, clip = True):
+        
+        start_time = time.time()
+
+        # too lazy to change "mov" variables to "wine" variables lol
+        mov_idx = wine_name_to_index[query]
+        query_vec = input_doc_matrix[mov_idx, :]
+        relevant_update_vec, irrelevant_update_vec = np.zeros_like(query_vec), np.zeros_like(query_vec) 
+        num_relevant, num_irrelevant = len(relevant), len(irrelevant)
+        
+        if num_relevant > 0:
+            for rel_mov_name in relevant:
+                relevant_update_vec += input_doc_matrix[wine_name_to_index[rel_mov_name], :]
+            relevant_update_vec = (b / float(num_relevant)) * relevant_update_vec
+            
+        if num_irrelevant > 0:
+            for irrel_mov_name in irrelevant:
+                irrelevant_update_vec += input_doc_matrix[wine_name_to_index[irrel_mov_name], :]
+            irrelevant_update_vec = (c / float(num_irrelevant)) * irrelevant_update_vec
+        
+        rocchio = a * query_vec + relevant_update_vec - irrelevant_update_vec
+        if clip:
+            np.clip(rocchio, 0, None, out=rocchio)
+
+        end_time = time.time()
+        print("Time taken for ROCCHIO: {:.4f} seconds".format(end_time - start_time))
+
+        return rocchio
