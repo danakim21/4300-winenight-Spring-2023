@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request
 from flask_cors import CORS
+import time
 
-from db import mysql_engine
+from db import mysql_engine, MYSQL_DATABASE
+from helpers.search.SimilarWines import SimilarWines
 from routes import (
     wine_reviews_search,
     suggest_wines,
@@ -34,5 +36,12 @@ def suggest_varietal():
 @app.route('/suggest_regions')
 def suggest_region():
     return suggest_regions(request)
+
+def create_wine_index():
+    query_sql = f"""CREATE INDEX wine_index ON {MYSQL_DATABASE}.wine_data(wine);"""
+    mysql_engine.query_executor(query_sql)
+
+SimilarWines.initialize_cache()
+create_wine_index()
 
 app.run(debug=True)

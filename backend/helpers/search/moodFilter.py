@@ -68,18 +68,21 @@ def mood_filter(results, mood, flavorSearch=None, similar=None, both=None):
         if m_keyword == "Sexy & Playful":
             m_keyword = "Sexy"
 
-        for wine_type in mood_wine_types[m_keyword]:
-            if wine_type not in wine_type_to_mood:
-                wine_type_to_mood[wine_type] = [m_keyword]
-            else:
-                wine_type_to_mood[wine_type].append(m_keyword)
+        if m_keyword in mood_wine_types:
+            for wine_type in mood_wine_types[m_keyword]:
+                if wine_type not in wine_type_to_mood:
+                    wine_type_to_mood[wine_type] = [m_keyword]
+                else:
+                    wine_type_to_mood[wine_type].append(m_keyword)
 
     filtered_results = []
     for wine_dict in results:
         matching_moods = []
         for type in wine_types:
             if type in wine_dict['varietal']:
-                matching_moods.extend(wine_type_to_mood[type])
+                if type in wine_type_to_mood:
+                    matching_moods.extend(wine_type_to_mood[type])
+                    
         if matching_moods:
             filtered_wine_dict = wine_dict.copy()  # Create a copy to avoid modifying the original wine_dict
             filtered_wine_dict['mood'] = ", ".join(set(matching_moods))  # Add the responsible moods to the wine dictionary
