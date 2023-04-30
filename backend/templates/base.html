@@ -247,19 +247,28 @@
     ) {
       let sim_score_div = "";
 
+      // if (combined_score !== undefined) {
+      //   sim_score_div = `<div class="sim-score"> - Your input of similar wine (Similarity Score: ${
+      //     sim_score.toFixed(2) * 100
+      //   }%) | Term Score: ${term_score} | Combined Score: ${
+      //     combined_score.toFixed(2) * 100
+      //   }</div>`;
+      // } else if (term_score) {
+      //   sim_score_div = `<div class="sim-score">Term Score: ${term_score}</div>`;
+      // } else {
+      //   sim_score_div = `<div class="sim-score">Similarity Score: ${
+      //     sim_score.toFixed(2) * 100
+      //   }%</div>`;
+      // }
+
       if (combined_score !== undefined) {
-        sim_score_div = `<div class="sim-score">Similarity Score: ${
-          sim_score.toFixed(2) * 100
-        }% | Term Score: ${term_score} | Combined Score: ${
-          combined_score.toFixed(2) * 100
-        }</div>`;
+        sim_score_div = `<div class="sim-score"><p>This wine is recommended based on</p><ul><li>Your input of similar wine (similarity score: ${sim_score.toFixed(2) * 100}%)</li><li>Your preferred flavor(s) appear(s) ${term_score} time(s) in this wine's review</li><li>The combined score for above is ${combined_score.toFixed(2) * 100}</li><li>Matches your choice of mood(s) of ${mood}</li></ul></div>`;
       } else if (term_score) {
-        sim_score_div = `<div class="sim-score">Term Score: ${term_score}</div>`;
+        sim_score_div = `<div class="sim-score"><p>This wine is recommended based on</p><ul><li>Your preferred flavor(s) appear(s) ${term_score} time(s) in this wine's review</li><li>Matches your choice of mood(s):${mood}</li></ul></div>`;
       } else {
-        sim_score_div = `<div class="sim-score">Similarity Score: ${
-          sim_score.toFixed(2) * 100
-        }%</div>`;
+        sim_score_div = `<div class="sim-score"><p>This wine is recommended based on</p><ul><li>Your input of similar wine (similarity score: ${sim_score.toFixed(2) * 100}%)</li><li>Your choice of mood(s):${mood}</li></ul></div>`;
       }
+
 
       return `<div class='output-content-div'>
                   <p class='output-title'>${name}</p>
@@ -280,12 +289,14 @@
                   </div>
 
                   <div class="output-line"></div>
+                  ${sim_score_div}
                   <div class="likedislikeButton"> 
+                  <p class="just-text"> Are you satisfied with the result?</p>
                   <button class="likeButton">👍🏻</button>  
-                  <button class="dislikeButton">👎🏻</button>  </ 
+                  <button class="dislikeButton">👎🏻</button>  
+                  </div>
               </div>  
-              ${sim_score_div}
-              <div>Matches the mood ${mood}</div>
+
               `;
     }
 
@@ -391,6 +402,7 @@
                 row.combined_score,
                 row.mood
               );
+
               document.getElementById("answer-box").appendChild(tempDiv);
 
               // like & dislike button event listeners
@@ -403,6 +415,23 @@
                   likedWines.add(row.wine);
                   console.log(`Liked wines: ${[...likedWines]}`);
                 });
+
+              // Get the button element
+              const likeButton = document.querySelector('.likeButton');
+
+              // Add a click event listener to the like button
+              likeButton.addEventListener('click', function() {
+                likeButton.classList.add('active');
+              });
+
+              const dislikeButton = document.querySelector('.dislikeButton');
+
+              // Add a click event listener to the dislike button
+              dislikeButton.addEventListener('click', function() {
+                dislikeButton.classList.add('active');
+              });
+
+
 
               tempDiv
                 .querySelector(".dislikeButton")
