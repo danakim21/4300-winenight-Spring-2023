@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 from flask_cors import CORS
 import time
+from sqlalchemy.exc import OperationalError
+
 
 from db import mysql_engine, MYSQL_DATABASE
 from helpers.search.SimilarWines import SimilarWines
@@ -38,8 +40,18 @@ def suggest_region():
     return suggest_regions(request)
 
 def create_wine_index():
-    query_sql = f"""CREATE INDEX IF NOT EXISTS wine_index ON {MYSQL_DATABASE}.wine_data(wine);"""
+    start_time = time.time()
+
+    try:
+        query_sql = f"""DROP INDEX wine_index ON {MYSQL_DATABASE}.wine_data;"""
+        mysql_engine.query_executor(query_sql)
+    except OperationalError as e:
+        print(f"Error occurred while dropping the index: {e}")
+
+    query_sql = f"""CREATE INDEX wine_index ON {MYSQL_DATABASE}.wine_data(wine);"""
     mysql_engine.query_executor(query_sql)
+    end_time = time.time()
+    print("Time taken for creating index: {:.4f} seconds".format(end_time - start_time))
 
 SimilarWines.initialize_cache()
 create_wine_index()
