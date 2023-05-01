@@ -54,6 +54,6 @@ def create_wine_index():
     print("Time taken for creating index: {:.4f} seconds".format(end_time - start_time))
 
 SimilarWines.initialize_cache()
-create_wine_index()
+# create_wine_index()
 
 # app.run(debug=True)
