@@ -22,7 +22,7 @@ class SimilarWines:
     _idf_cache = None
     _doc_norms_cache = None
 
-    def __init__(self, wine_name, liked_wines=[], disliked_wines=[]):
+    def __init__(self, wine_name, liked_wines, disliked_wines):
         start_time = time.time()
         self.wine_name = wine_name
 
@@ -245,7 +245,7 @@ class SimilarWines:
             return []
         
         # If either the liked wines list or the disliked wines list is non-empty, use rocchio
-        if self.liked_wines or self.disliked_wines:
+        if len(self.liked_wines) > 0 or len(self.disliked_wines) > 0:
             if self.wine_name == "null":
                 query_vec = np.zeros_like(self.wine_term_matrix[0,:])
             else:
@@ -308,7 +308,7 @@ class SimilarWines:
         
         
     def get_rocchio_vector(self, query, relevant, irrelevant, input_doc_matrix, \
-            wine_name_to_index, a=.3, b=.3, c=.8, clip = True):
+            wine_name_to_index, a=1, b=1, c=9999999999999999, clip = True):
         
         start_time = time.time()
 
