@@ -49,7 +49,7 @@ def sql_search_reviews(request, similarity_scores=None):
         wine_list = ", ".join([f'"{w.lower()}"' for w in wine_names])
         query_sql += f" AND (LOWER(wine) IN ({wine_list}) OR LENGTH(TRIM(wine)) = 0)"
 
-    keys = ["wine", "country", "winery", "category", "designation", "varietal", "appellation", "alcohol", "price", "rating", "reviewer", "review", "price_numeric", "price_range", "alcohol_numeric"]
+    keys = ["wine", "country", "winery", "category", "designation", "varietal", "appellation", "price", "rating", "reviewer", "review", "price_numeric", "price_range", "alcohol_numeric"]
     query_result = mysql_engine.query_selector(query_sql)
     results = [dict(zip(keys, row)) for row in query_result] 
 
