@@ -16,7 +16,7 @@ def boolean_search(data, keywords, similarity_scores=None, flavorSearch=None):
         num_exact_matches = sum(len(re.findall(r'\b{}\b'.format(keyword), review, re.IGNORECASE)) for keyword in keywords)
 
         # Count substring matches
-        num_substring_matches = sum(len(re.findall(r'{}'.format(keyword), review, re.IGNORECASE)) for keyword in keywords)
+        num_substring_matches = sum(len(re.findall(r'\b{}[\w]*\b'.format(keyword), review, re.IGNORECASE)) for keyword in keywords)
 
         # Subtract exact matches from substring matches to avoid double counting
         num_substring_matches -= num_exact_matches
