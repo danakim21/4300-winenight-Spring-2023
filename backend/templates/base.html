@@ -837,6 +837,14 @@
       document.getElementById("result-text").innerHTML = "Loading...";
       let recommendButton = document.querySelector(".recommend-button");
 
+      const inputField = document.getElementById("filter-text-val-preferred");
+
+      if (inputField.value.trim() !== "") {
+        inputField.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Enter" })
+        );
+      }
+
       const wine_name = document.getElementById("filter-text-val");
       let moodButtons = document.querySelectorAll(".mood-button.active");
 
