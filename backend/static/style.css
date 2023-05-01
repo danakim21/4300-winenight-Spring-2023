@@ -10,7 +10,7 @@
   justify-content: start;
   align-items: center;
   flex-direction: column;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .logo img {
@@ -133,7 +133,7 @@
 }
 
 #filter-button::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 6px;
   height: 6px;
@@ -157,7 +157,7 @@
 .add-title {
   display: flex;
   color: rgba(0, 0, 0, 0.64);
-  font-family: 'Inter';
+  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -272,7 +272,7 @@ input::placeholder {
   text-indent: 10px;
 }
 
-input[type='number'] {
+input[type="number"] {
   font-size: 14px;
 }
 
@@ -302,7 +302,7 @@ button {
 
 .step-text {
   margin-bottom: 20px;
-  font-family: 'Jacques Francois';
+  font-family: "Jacques Francois";
   font-size: 16pt;
 }
 
@@ -321,7 +321,7 @@ button {
 }
 
 .mood-title {
-  font-family: 'Jacques Francois';
+  font-family: "Jacques Francois";
   height: 28px;
 
   font-style: normal;
@@ -430,7 +430,7 @@ button {
   box-shadow: none;
   margin-top: 29px;
   color: #ffffff;
-  font-family: 'Inter';
+  font-family: "Inter";
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -493,7 +493,7 @@ button {
 }
 
 .output-title {
-  font-family: 'Jacques Francois';
+  font-family: "Jacques Francois";
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -505,7 +505,7 @@ button {
 }
 
 .output-price {
-  font-family: 'Jacques Francois';
+  font-family: "Jacques Francois";
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -534,7 +534,7 @@ button {
 }
 
 .output-category {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -562,7 +562,7 @@ button {
 }
 
 .output-varietal {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -608,7 +608,7 @@ button {
 .output-country {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: flex-end;
   padding: 0px;
   gap: 6px;
 
@@ -623,11 +623,11 @@ button {
 }
 
 .episode-title {
-  font-family: 'Kanit', sans-serif;
+  font-family: "Kanit", sans-serif;
 }
 
 .episode-desc {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 strong {
@@ -725,6 +725,18 @@ strong {
   background-color: #f1f1f1;
 }
 
+.tag-flavor {
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-right: 8px;
+  font-size: 16px;
+  line-height: 2;
+  color: #000000;
+  background-color: #f1f1f1;
+}
+
 .tag-varietal {
   display: inline-block;
   border-radius: 6px;
@@ -748,6 +760,17 @@ strong {
 }
 
 .close-btn {
+  font-size: 16px;
+  line-height: 1;
+  margin-left: 8px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #999;
+  margin-top: 5px;
+}
+
+.close-btn-flavor {
   font-size: 16px;
   line-height: 1;
   margin-left: 8px;

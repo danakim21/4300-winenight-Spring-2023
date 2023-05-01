@@ -50,5 +50,4 @@ def boolean_search(data, keywords, similarity_scores=None, flavorSearch=None):
         results.sort(key=lambda x: x['score'], reverse=True)
     else:
         results.sort(key=lambda x: x['term_score'], reverse=True)
-
     return results

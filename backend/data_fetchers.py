@@ -16,6 +16,14 @@ def sql_search_reviews(request, similarity_scores=None):
     wine_param = request.args.get('wine')
     wine_names = [w.strip() for w in wine_param.split(',')] if wine_param else None
 
+    new_mood = []
+    
+    for mood_item in mood:
+        if mood_item.startswith('\n') and mood_item.endswith('\n'):
+            new_mood.append(mood_item.strip().replace('\n', '\n\n'))
+        else:
+            new_mood.append(mood_item)
+
     # Query 
     query_sql = f"""
         SELECT * FROM {MYSQL_DATABASE}.wine_data 
@@ -61,21 +69,29 @@ def sql_search_reviews(request, similarity_scores=None):
             if wine_name in similarity_scores_dict:
                 result.update(similarity_scores_dict[wine_name])
     else:
+        if len(flavors) == 0:
+            flavors = ['']
         results = boolean_search(results, flavors, similarity_scores=None, flavorSearch=True)
 
-    # Filter results by mood
-    if mood:
+    if new_mood:
         if similarity_scores is None:
-            results = mood_filter(results, mood, flavorSearch=True)
-        elif similarity_scores is not None and flavors[0] == '':
-            results = mood_filter(results, mood, similar=True)
+            results = mood_filter(results, new_mood, flavorSearch=True)
+        elif similarity_scores is not None and len(flavors) == 0:
+            results = mood_filter(results, new_mood, similar=True)
         else:
-            results = mood_filter(results, mood, both=True)
+            results = mood_filter(results, new_mood, both=True)
     results = results[:6]
     return json.dumps(results)
 
 def fetch_wine_suggestions(input):
-    query = f"SELECT wine FROM {MYSQL_DATABASE}.wine_data WHERE LOWER(wine) LIKE '%%{input}%%' LIMIT 30"
+    query = f"""SELECT wine FROM {MYSQL_DATABASE}.wine_data 
+                WHERE LOWER(wine) LIKE '%%{input}%%'
+                ORDER BY (CASE 
+                            WHEN LOWER(wine) LIKE '{input}%%' THEN 0
+                            ELSE 1
+                          END) ASC,
+                          wine ASC
+                LIMIT 30"""
     data = mysql_engine.query_selector(query)
     wine_names = [row[0] for row in data]
     return [*set(wine_names)][:6]
