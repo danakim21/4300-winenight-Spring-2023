@@ -25,7 +25,7 @@ def wine_reviews_search(request):
     # Check if wine_name, liked wines, or disliked wines are provided
     if wine_name != "null" and not liked_wines and not disliked_wines:
         sw = SimilarWines(wine_name, liked_wines=liked_wines, disliked_wines=disliked_wines)
-        similarity_scores = sw.get_similarity_scores(limit=10000)
+        similarity_scores = sw.get_similarity_scores(limit=1000)
 
         # If flavors are also provided, filter the similarity_scores by flavors
         if len(flavors) > 0 and flavors[0] != '':
