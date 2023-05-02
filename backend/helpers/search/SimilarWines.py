@@ -50,6 +50,12 @@ class SimilarWines:
         self.wine_name_to_wine_idx = {v: k for k, v in SimilarWines._idx_to_wine_name.items()}
         self.liked_wines = liked_wines
         self.disliked_wines = disliked_wines
+        self.wine_term_matrix = np.zeros([len(self.reviews_non_tokenized), len(self.inverted_index)])
+        self.term_idx_to_term = {}
+        for term_idx, (term, tup_list) in enumerate(self.inverted_index.items()):
+            for (wine_idx, count) in tup_list:
+                self.wine_term_matrix[wine_idx][term_idx] = count
+            self.term_idx_to_term[term_idx] = term
         
         self.query = self.getQuery(wine_name)
         self.search_results = self.index_search(self.query, self.inverted_index, self.idf, self.doc_norms)
@@ -241,27 +247,24 @@ class SimilarWines:
     
     def index_search(self, query, index, idf, doc_norms, score_func=accumulate_dot_scores, tokenizer=tt()):
         start_time = time.time()
-        if query is None:
-            return []
+        # if query is None:
+        #     return []
         
         # If either the liked wines list or the disliked wines list is non-empty, use rocchio
         if len(self.liked_wines) > 0 or len(self.disliked_wines) > 0:
-            if self.wine_name == "null":
-                query_vec = np.zeros_like(self.wine_term_matrix[0,:])
-            else:
-                query_vec = self.wine_term_matrix[self.wine_name_to_wine_idx[self.wine_name],:]
-            rocchio = self.get_rocchio_vector(self, query_vec, self.liked_wines, self.disliked_wines, \
-                                              input_doc_matrix=self.wine_term_matrix, wine_name_to_index=self.wine_name_to_wine_idx)
+            rocchio = self.get_rocchio_vector(self.wine_name, self.liked_wines, self.disliked_wines, self.wine_term_matrix, self.wine_name_to_wine_idx)
             rocchio = rocchio.tolist()
             query_word_counts = {}
             for term_idx, word_count in enumerate(rocchio):
                 query_word_counts[self.term_idx_to_term[term_idx]] = word_count
-        else:
+        elif query is not None:
             # Tokenize query
             query_words = tokenizer.tokenize(query.lower())
             query_word_counts = {}
             for word in query_words:
                 query_word_counts[word] = query_word_counts.get(word, 0) + 1
+        else:
+            return []
 
         # Compute dot products
         doc_scores = score_func(self, query_word_counts, index, idf)
@@ -273,10 +276,13 @@ class SimilarWines:
                 norm_sum += (query_word_counts[word] * idf[word])**2
         
         query_norm = np.sqrt(norm_sum)
+        if query_norm == 0:
+            query_norm = 1
         
         # Normalize scores
         for doc_id in doc_scores:
             doc_scores[doc_id] /= (query_norm * doc_norms[doc_id])
+            # doc_scores[doc_id] = np.log(doc_scores[doc_id]) - np.log(query_norm) - np.log(doc_norms[doc_id])
         
         # Return sorted results
         results = sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)
@@ -312,20 +318,21 @@ class SimilarWines:
         
         start_time = time.time()
 
-        # too lazy to change "mov" variables to "wine" variables lol
-        mov_idx = wine_name_to_index[query]
-        query_vec = input_doc_matrix[mov_idx, :]
+        if query == "null" or query is None:
+            query_vec = np.zeros_like(input_doc_matrix[0,:])
+        else:
+            query_vec = input_doc_matrix[wine_name_to_index[query], :]
         relevant_update_vec, irrelevant_update_vec = np.zeros_like(query_vec), np.zeros_like(query_vec) 
         num_relevant, num_irrelevant = len(relevant), len(irrelevant)
         
         if num_relevant > 0:
-            for rel_mov_name in relevant:
-                relevant_update_vec += input_doc_matrix[wine_name_to_index[rel_mov_name], :]
+            for rel_name in relevant:
+                relevant_update_vec += input_doc_matrix[wine_name_to_index[rel_name], :]
             relevant_update_vec = (b / float(num_relevant)) * relevant_update_vec
-            
+
         if num_irrelevant > 0:
-            for irrel_mov_name in irrelevant:
-                irrelevant_update_vec += input_doc_matrix[wine_name_to_index[irrel_mov_name], :]
+            for irrel_name in irrelevant:
+                irrelevant_update_vec += input_doc_matrix[wine_name_to_index[irrel_name], :]
             irrelevant_update_vec = (c / float(num_irrelevant)) * irrelevant_update_vec
         
         rocchio = a * query_vec + relevant_update_vec - irrelevant_update_vec
