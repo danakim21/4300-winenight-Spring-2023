@@ -15,6 +15,7 @@ def sql_search_reviews(request, similarity_scores=None):
     mood = request.args.getlist("mood")
     wine_param = request.args.get('wine')
     wine_names = [w.strip() for w in wine_param.split(',')] if wine_param else None
+    disliked_wines = request.args.getlist("dislikedWines")
 
     new_mood = []
     
@@ -80,8 +81,20 @@ def sql_search_reviews(request, similarity_scores=None):
             results = mood_filter(results, new_mood, similar=True)
         else:
             results = mood_filter(results, new_mood, both=True)
-    results = results[:6]
-    return json.dumps(results)
+
+    final_results = results[:6]
+
+    if len(disliked_wines) > 0:
+        final_results = []
+        count = 0
+        for wine_dict in results:
+            if count == 6:
+                break
+            if wine_dict['wine'] not in disliked_wines:
+                final_results.append(wine_dict)
+                count += 1
+
+    return json.dumps(final_results)
 
 def fetch_wine_suggestions(input):
     query = f"""SELECT wine FROM {MYSQL_DATABASE}.wine_data 
